@@ -16,7 +16,7 @@ public class Controller {
 
     private Grid grid;
     private HashMap<Character, Block> blocks;
-    private Agent agent;
+    private Position agent;
 
     public Controller() {
         this.blocks = new HashMap<>();
@@ -28,63 +28,43 @@ public class Controller {
 
     public void addBlock(char blockID, int x, int y) throws InvalidPositionException, InvalidBlockIDException {
         Block block = new Block(blockID, x, y);
-        this.grid.addBlock(block);
+        this.grid.addBlock(blockID, x, y);
         this.blocks.put(block.getID(), block);
     }
 
+    public void addAgent(Position position) throws InvalidPositionException {
+        this.grid.addAgent(position);
+        this.agent = position;
+    }
+
     public void addAgent(int x, int y) throws InvalidPositionException {
-        Agent agent = new Agent(x, y);
-        this.grid.addAgent(agent);
-        this.agent = agent;
+        this.addAgent(new Position(x, y));
     }
 
     public void move(DIRECTION direction) throws InvalidDirectionException {
-        if (!canMove(direction)) throw new InvalidDirectionException(direction, agent.getPosition(), this.getNewPosition(direction));
+        if (!canMove(direction)) throw new InvalidDirectionException(direction, agent, this.getNewPosition(direction));
 
         // New Agent Position
         Position newPosition = getNewPosition(direction);
 
         // Check if there is a block in the new position
-        Token newToken = this.grid.getPosition(newPosition);
-        Agent newAgent = new Agent(newPosition.getX(), newPosition.getY());
+        Block block = new Block(this.grid.getPosition(newPosition), newPosition);
+        Block agent = new Block('*', this.agent);
 
         Grid newGrid = Grid.getCopy(this.grid);
 
-        Block newBlock = null;
-        if (newToken != null) {
-            try {
-                newBlock = new Block(newToken.getID(), this.agent.getX(), this.agent.getY());
-            } catch (InvalidBlockIDException shouldNotHappen) {
-                shouldNotHappen.printStackTrace();
-            }
-        }
         try {
-            newGrid.addAgent(newAgent);
-            if (newBlock == null) {
-                for (Block block : this.blocks.values()) {
-                    newGrid.addBlock(block);
-                }
-            } else {
-                Block oldBlock = null;
-                for (Block block : this.blocks.values()) {
-                    if (block.getID() != newBlock.getID()) {
-                        newGrid.addBlock(block);
-                    } else {
-                        newGrid.addBlock(newBlock);
-                        oldBlock = block;
-                    }
-                }
-                if(oldBlock != null){
-                    this.blocks.remove(oldBlock.getID());
-                    this.blocks.put(newBlock.getID(), newBlock);
-                }
-            }
-            this.grid = newGrid;
-            this.agent = newAgent;
-        } catch (InvalidPositionException shouldNotHappen) {
-            shouldNotHappen.printStackTrace();
+            newGrid.removeBlock(agent.getID(), agent.getPosition());
+            newGrid.removeBlock(block.getID(), block.getPosition());
+
+            newGrid.addBlock(agent.getID(), block.getPosition());
+            newGrid.addBlock(block.getID(), agent.getPosition());
+        } catch (InvalidPositionException e) {
+            e.printStackTrace();
         }
 
+        this.agent = grid.getBlock('*').getPosition();
+        this.grid = newGrid;
     }
 
     public boolean canMove(DIRECTION direction) {

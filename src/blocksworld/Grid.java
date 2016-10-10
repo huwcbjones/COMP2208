@@ -1,9 +1,13 @@
 package blocksworld;
 
 import blocksworld.exceptions.InvalidPositionException;
+import org.omg.CORBA.CharHolder;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 /**
  * Grid
@@ -17,13 +21,9 @@ public class Grid {
     private int width = -1;
     private int height = -1;
     private boolean isInfiniteGrid = true;
-    private Token[][] grid;
+    private char[][] grid;
 
-    private HashMap<Character, Block> blocks;
-    private Agent agent;
-
-    public Grid() {
-    }
+    private HashMap<Character, Position> blocks;
 
     public Grid(int width, int height) {
         this.width = width;
@@ -31,48 +31,87 @@ public class Grid {
         this.isInfiniteGrid = (this.width == -1 || this.height == -1);
         this.blocks = new HashMap<>();
         if(!isInfiniteGrid){
-            this.grid = new Token[width][height];
+            this.grid = new char[width][height];
         }
     }
 
-    public void addAgent(Agent agent) throws InvalidPositionException {
-        if (!isPositionValid(agent.getX(), agent.getY())) {
-            throw new InvalidPositionException(agent.getX(), agent.getY());
+    public void addAgent (Position position) throws InvalidPositionException {
+        if (!isPositionValid(position.getX(), position.getY())) {
+            throw new InvalidPositionException(position);
         }
-        this.agent = agent;
-        this.grid[agent.getX()][agent.getY()] = agent;
+        this.grid[position.getX()][position.getY()] = '*';
+        this.blocks.put('*', position);
     }
 
+    public void addAgent (int x, int y) throws InvalidPositionException {
+        addAgent(new Position(x, y));
+    }
+
+    public boolean isPositionValid (Position position) {
+        return isPositionValid(position.getX(), position.getY());
+    }
     public boolean isPositionValid(int x, int y) {
         return isInfiniteGrid || (x < this.width && y < this.height);
     }
 
-    public void addBlock(Block block) throws InvalidPositionException {
-        if (!isPositionValid(block.getX(), block.getY())) {
-            throw new InvalidPositionException(block.getX(), block.getY());
+    /**
+     * Adds a block to the grid at position (x, y) with the ID blockID.
+     * Throws an exception if the position is invalid
+     *
+     * @param blockID  ID of the block, must be unique
+     * @param position Position of the block
+     * @throws InvalidPositionException Thrown if the position is invalid
+     */
+    public void addBlock (char blockID, Position position) throws InvalidPositionException {
+        if (!isPositionValid(position)) {
+            throw new InvalidPositionException(position);
         }
-        this.blocks.put(block.getID(), block);
-        this.grid[block.getX()][block.getY()] = block;
+        if (blockID == Character.MIN_VALUE) return;
+        this.blocks.put(blockID, position);
+        this.grid[position.getX()][position.getY()] = blockID;
     }
 
-    public Agent getAgent() {
-        return agent;
+    /**
+     * Adds a block to the grid at position (x, y) with the ID blockID.
+     * Throws an exception if the position is invalid
+     *
+     * @param blockID ID of the block, must be unique
+     * @param x       x position of the block
+     * @param y       y position of the block
+     * @throws InvalidPositionException Thrown if the position is invalid
+     */
+    public void addBlock (char blockID, int x, int y) throws InvalidPositionException {
+        addBlock(blockID, new Position(x, y));
+    }
+
+    public void removeBlock (char blockID, int x, int y) throws InvalidPositionException {
+        removeBlock(blockID, new Position(x, y));
+    }
+
+    public void removeBlock (char blockID, Position position) throws InvalidPositionException {
+        if (!isPositionValid(position)) {
+            throw new InvalidPositionException(position);
+        }
+        this.blocks.remove(blockID);
+        this.grid[position.getX()][position.getY()] = '\u0000';
     }
 
     public Block getBlock(char blockID) throws NoSuchElementException {
         if (!this.blocks.containsKey(blockID)) {
             throw new NoSuchElementException("No such block with ID: " + blockID);
         }
-        return this.blocks.get(blockID);
+        return new Block(blockID, this.blocks.get(blockID));
     }
 
-    public Token getPosition(int x, int y){
+    public Block getAgent() throws NoSuchElementException {
+        return getBlock('*');
+    }
+
+    public char getPosition (int x, int y) {
         return this.grid[x][y];
     }
 
-    public Token getPosition(Position position){
-        return getPosition(position.getX(),position.getY());
-    }
+    public char getPosition (Position position) { return this.grid[position.getX()][position.getY()];}
 
     @Override
     public String toString() {
@@ -86,17 +125,12 @@ public class Grid {
 
     private String getFiniteGrid() {
         String grid = "";
-        Token token;
-        yloop:
+        Character block;
         for (int y = 0; y < this.width; y++) {
-            xloop:
             for (int x = 0; x < this.height; x++) {
-                token = this.grid[x][y];
-                if(token == null) {
-                    grid += "_";
-                } else {
-                    grid += token.getID();
-                }
+                block = this.grid[x][y];
+                grid += ( block != Character.MIN_VALUE ) ? block : "-";
+
             }
             grid += "\n";
         }
@@ -104,7 +138,15 @@ public class Grid {
         return grid;
     }
 
-    public static Grid getCopy(Grid grid) {
-        return new Grid(grid.width, grid.height);
+    public static Grid getCopy (Grid grid) {
+        Grid newGrid = new Grid(grid.width, grid.height);
+        for (Map.Entry<Character, Position> block : grid.blocks.entrySet()) {
+            try {
+                newGrid.addBlock(block.getKey(), block.getValue());
+            } catch (InvalidPositionException e) {
+                e.printStackTrace();
+            }
+        }
+        return newGrid;
     }
 }

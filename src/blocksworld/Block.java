@@ -1,18 +1,41 @@
 package blocksworld;
 
-import blocksworld.exceptions.InvalidBlockIDException;
-
 /**
  * Block on the Grid
  *
  * @author Huw Jones
  * @since 08/10/2016
  */
-public class Block extends Token {
+public class Block {
+    private char blockID;
+    private int x;
+    private int y;
 
-    public Block(char id, int x, int y) throws InvalidBlockIDException {
-        super(x, y);
-        if (!Character.isAlphabetic(id)) throw new InvalidBlockIDException(id);
-        this.id = id;
+    public int getX () {
+        return x;
+    }
+
+    public int getY () {
+        return y;
+    }
+
+    public char getID () {
+        return blockID;
+    }
+
+    public Position getPosition () {
+        return new Position(x, y);
+    }
+
+    public Block (char blockID, int x, int y) {
+        this.blockID = blockID;
+        this.x = x;
+        this.y = y;
+    }
+
+    public Block (char blockID, Position position) {
+        this.blockID = blockID;
+        this.x = position.getX();
+        this.y = position.getY();
     }
 }

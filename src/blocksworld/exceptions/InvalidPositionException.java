@@ -1,5 +1,7 @@
 package blocksworld.exceptions;
 
+import blocksworld.Position;
+
 /**
  * {DESCRIPTION}
  *
@@ -10,5 +12,9 @@ public class InvalidPositionException extends Exception {
 
     public InvalidPositionException(int x, int y) {
         super(String.format("Invalid position at (%d, %d)", x, y));
+    }
+
+    public InvalidPositionException(Position position) {
+        this(position.getX(), position.getY());
     }
 }

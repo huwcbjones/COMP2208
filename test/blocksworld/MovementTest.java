@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  * @author Huw Jones
  * @since 08/10/2016
  */
-public class ControllerTest {
+public class MovementTest {
 
     Controller c;
     @Before
@@ -37,10 +37,10 @@ public class ControllerTest {
     @Test
     public void moveNorth() throws Exception {
         c.move(Controller.DIRECTION.NORTH);
-        assertEquals("Failed to move north.", "____\n" +
-                "____\n" +
-                "___*\n" +
-                "abc_\n", c.getGrid());
+        assertEquals("Failed to move north.", "----\n" +
+                "----\n" +
+                "---*\n" +
+                "abc-\n", c.getGrid());
     }
 
     @Test
@@ -58,9 +58,9 @@ public class ControllerTest {
     @Test
     public void moveWest() throws Exception {
         c.move(Controller.DIRECTION.WEST);
-        assertEquals("Failed to move west.", "____\n" +
-                "____\n" +
-                "____\n" +
+        assertEquals("Failed to move west.", "----\n" +
+                "----\n" +
+                "----\n" +
                 "ab*c\n", c.getGrid());
     }
 

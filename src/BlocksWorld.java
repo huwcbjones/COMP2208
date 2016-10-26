@@ -1,6 +1,7 @@
-import blocksworld.Controller;
+import blocksworld.BDF;
+import blocksworld.Grid;
+import blocksworld.GridController;
 import blocksworld.exceptions.InvalidBlockIDException;
-import blocksworld.exceptions.InvalidDirectionException;
 import blocksworld.exceptions.InvalidPositionException;
 
 /**
@@ -12,34 +13,20 @@ import blocksworld.exceptions.InvalidPositionException;
 public class BlocksWorld {
 
     public static void main(String[] args){
-        Controller c = new Controller();
-        c.createGrid(4, 4);
-        try {
-            c.addBlock('a', 0, 3);
-            c.addBlock('b', 1, 3);
-            c.addBlock('c', 2, 3);
-            c.addAgent(3, 3);
-        } catch (InvalidPositionException | InvalidBlockIDException e) {
-            e.printStackTrace();
-        }
-        c.printGrid();
+        BDF bdfSearch = new BDF();
 
+        Grid g = GridController.createGrid(4, 4);
         try {
-            c.move(Controller.DIRECTION.NORTH);
-            c.printGrid();
-            c.move(Controller.DIRECTION.WEST);
-            c.printGrid();
-            c.move(Controller.DIRECTION.WEST);
-            c.printGrid();
-            c.move(Controller.DIRECTION.SOUTH);
-            c.printGrid();
-            c.move(Controller.DIRECTION.EAST);
-            c.printGrid();
-            c.move(Controller.DIRECTION.EAST);
-            c.printGrid();
-        } catch (InvalidDirectionException e) {
+            GridController.placeBlock(g, 'a', 0, 0);
+            GridController.placeBlock(g, 'b', 1, 2);
+            GridController.placeBlock(g, 'c', 1, 3);
+            GridController.placeAgent(g, 0, 1);
+        } catch (InvalidPositionException e) {
             e.printStackTrace();
         }
 
+        //bdfSearch.setStartState(g);
+
+        bdfSearch.run();
     }
 }

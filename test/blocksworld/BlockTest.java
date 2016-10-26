@@ -1,9 +1,7 @@
 package blocksworld;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
 
@@ -15,21 +13,20 @@ import static org.junit.Assert.*;
  */
 public class BlockTest {
 
-    Controller c;
+    Grid g;
 
     @Before
     public void setUp() throws Exception {
-        c = new Controller();
-        c.createGrid(4, 4);
+        g = GridController.createGrid(4, 4);
     }
 
 
     @Test
     public void testAgentAdd() throws Exception {
-        c.addAgent(0, 0);
+        GridController.placeAgent(g, 0, 0);
         assertEquals("Failed to add agent.", "*---\n" +
                 "----\n" +
                 "----\n" +
-                "----\n", c.getGrid());
+                "----\n", g.toString());
     }
 }

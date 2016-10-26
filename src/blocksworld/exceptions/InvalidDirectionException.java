@@ -1,6 +1,6 @@
 package blocksworld.exceptions;
 
-import blocksworld.Controller;
+import blocksworld.GridController;
 import blocksworld.Position;
 
 /**
@@ -11,7 +11,7 @@ import blocksworld.Position;
  */
 public class InvalidDirectionException extends Exception {
 
-    public InvalidDirectionException(Controller.DIRECTION d, Position oldPos, Position newPos) {
+    public InvalidDirectionException(GridController.DIRECTION d, Position oldPos, Position newPos) {
         super("Cannot move in direction: " + d + ", from position " + oldPos + ", to " + newPos);
     }
 }

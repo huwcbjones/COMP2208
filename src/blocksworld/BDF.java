@@ -55,10 +55,6 @@ public class BDF extends Search {
                 }
             }
             currentNode = nodeQueue.poll();
-
-            if ((numberOfNodes % 5000) == 0){
-                System.out.println(String.format("Expanded %d nodes...", numberOfNodes));
-            }
         }
 
         System.out.println("Found solution. Expanded " + numberOfNodes);

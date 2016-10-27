@@ -4,6 +4,7 @@ import blocksworld.exceptions.InvalidBlockIDException;
 import blocksworld.exceptions.InvalidPositionException;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -16,15 +17,17 @@ public abstract class Search {
 
     protected Grid startGrid;
     private Grid exitGrid;
+    protected long randomSeed;
+    protected Random random;
 
     public Search(){
         this.buildGrid();
         this.createExitGrid();
     }
 
-    abstract void preRun();
+    abstract protected void preRun();
 
-    void buildGrid(){
+    private void buildGrid(){
         startGrid = GridController.createGrid(4, 4);
         try {
             GridController.placeBlock(startGrid, 'a', 0, 3);
@@ -36,10 +39,16 @@ public abstract class Search {
         }
     }
 
-    abstract void runSearch();
+    abstract protected void runSearch();
 
     public void run(){
+        System.out.println("Creating random seed...");
+        this.randomSeed = new Random().nextLong();
+        this.random =  new Random(this.randomSeed);
+        System.out.println(String.format("Random seed: %d.", this.randomSeed));
+        System.out.println("Running Search::preRun");
         this.preRun();
+        System.out.println("Running Search::runSearch");
         this.runSearch();
     }
 

@@ -1,0 +1,68 @@
+package blocksworld.search;
+
+import blocksworld.Grid;
+import blocksworld.GridController;
+import blocksworld.GridController.DIRECTION;
+import blocksworld.Node;
+import blocksworld.Search;
+import blocksworld.exceptions.InvalidDirectionException;
+
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+
+/**
+ * {DESCRIPTION}
+ *
+ * @author Huw Jones
+ * @since 21/10/2016
+ */
+public class BDF extends Search {
+
+    private Queue<Node> nodeQueue;
+    private Node rootNode;
+
+    @Override
+    protected void preRun() {
+        this.nodeQueue = new ConcurrentLinkedQueue<>();
+        this.rootNode = new Node(null, null);
+        this.rootNode.setGrid(this.startGrid);
+        this.nodeQueue.add(this.rootNode);
+    }
+
+    @Override
+    protected void runSearch() {
+        int numberOfNodes = 0;
+        Node currentNode = nodeQueue.poll();
+        Grid currentGrid = currentNode.getGrid();
+        while ((!this.checkExitCondition(currentGrid))) {
+
+            numberOfNodes++;
+            if (currentNode.getDirection() != null) {
+                try {
+                    currentGrid = GridController.move(currentNode.getParent().getGrid(), currentNode.getDirection());
+                    currentNode.setGrid(currentGrid);
+                } catch (InvalidDirectionException e) {
+                    continue;
+                }
+            }
+
+            if (this.checkExitCondition(currentNode.getGrid())) {
+                break;
+            }
+
+            Node n;
+            for (DIRECTION d : DIRECTION.values()) {
+                if (GridController.canMove(currentGrid, d)) {
+                    n = new Node(currentNode, d);
+                    n.setGrid(currentNode.getGrid());
+                    nodeQueue.add(n);
+                }
+            }
+            currentNode = nodeQueue.poll();
+        }
+
+        System.out.println("Found solution. Expanded " + numberOfNodes);
+
+        //System.out.println("Solution as follows:");
+    }
+}

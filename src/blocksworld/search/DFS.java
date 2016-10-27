@@ -1,34 +1,42 @@
-package blocksworld;
+package blocksworld.search;
 
+import blocksworld.Grid;
+import blocksworld.GridController;
 import blocksworld.GridController.DIRECTION;
+import blocksworld.Node;
+import blocksworld.Search;
 import blocksworld.exceptions.InvalidDirectionException;
 
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * {DESCRIPTION}
  *
  * @author Huw Jones
- * @since 21/10/2016
+ * @since 27/10/2016
  */
-public class BDF extends Search {
+public class DFS extends Search {
 
-    private Queue<Node> nodeQueue;
+
+    private Stack<Node> nodeStack;
     private Node rootNode;
 
     @Override
-    void preRun() {
-        this.nodeQueue = new ConcurrentLinkedQueue<>();
+    protected void preRun() {
+        this.nodeStack = new Stack<>();
         this.rootNode = new Node(null, null);
         this.rootNode.setGrid(this.startGrid);
-        this.nodeQueue.add(this.rootNode);
+        this.nodeStack.add(this.rootNode);
     }
 
     @Override
-    void runSearch() {
+    protected void runSearch() {
         int numberOfNodes = 0;
-        Node currentNode = nodeQueue.poll();
+        Node currentNode = nodeStack.pop();
         Grid currentGrid = currentNode.getGrid();
         while ((!this.checkExitCondition(currentGrid))) {
 
@@ -46,15 +54,20 @@ public class BDF extends Search {
                 break;
             }
 
+            ArrayList<DIRECTION> directions = new ArrayList<>(4);
+            Arrays.stream(DIRECTION.values()).forEach(directions::add);
+
             Node n;
-            for (DIRECTION d : DIRECTION.values()) {
-                if (GridController.canMove(currentGrid, d)) {
-                    n = new Node(currentNode, d);
+            DIRECTION direction;
+            while (directions.size() != 0) {
+                direction = directions.get(this.random.nextInt(directions.size()) - 1);
+                if (GridController.canMove(currentGrid, direction)) {
+                    n = new Node(currentNode, direction);
                     n.setGrid(currentNode.getGrid());
-                    nodeQueue.add(n);
+                    nodeStack.push(n);
                 }
             }
-            currentNode = nodeQueue.poll();
+            currentNode = nodeStack.pop();
         }
 
         System.out.println("Found solution. Expanded " + numberOfNodes);

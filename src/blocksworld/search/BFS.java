@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @author Huw Jones
  * @since 21/10/2016
  */
-public class BDF extends Search {
+public class BFS extends Search {
 
     private Queue<Node> nodeQueue;
     private Node rootNode;

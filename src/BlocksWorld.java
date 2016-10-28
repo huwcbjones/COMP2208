@@ -1,11 +1,12 @@
-import blocksworld.Search;
-import blocksworld.search.BDF;
 import blocksworld.Grid;
 import blocksworld.GridController;
+import blocksworld.Position;
+import blocksworld.Search;
 import blocksworld.exceptions.InvalidPositionException;
+import blocksworld.search.BFS;
 import blocksworld.search.DFS;
 
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,17 +18,17 @@ import java.util.List;
  */
 public class BlocksWorld {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         List<String> argList = Arrays.asList(args);
 
-        if(argList.contains("--help") || argList.contains("-h")) {
+        if (argList.contains("--help") || argList.contains("-h")) {
             help();
-        } else if(argList.contains("--search") || argList.contains("-s")){
-            int index = (argList.contains("-s")) ? argList.indexOf("-s") : argList.indexOf("--search");
+        } else if (argList.contains("--type") || argList.contains("-t")) {
+            int index = (argList.contains("-t")) ? argList.indexOf("-t") : argList.indexOf("--type");
             try {
                 String type = argList.get(index + 1);
                 search(type);
-            } catch (ArrayIndexOutOfBoundsException e){
+            } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("No option was specified for " + argList.get(index));
             }
         } else {
@@ -48,22 +49,19 @@ public class BlocksWorld {
      */
     private static void help() {
         BlocksWorld.header();
-        //System.out.println("Arguments:");
-        //System.out.println("  -b, --batch\t\tDo not enter interactive mode after config is loaded. Requires -n.");
-        //System.out.println("  -f, --file\t\tSpecifies file to load simulation config.");
+        System.out.println("Arguments:");
+        System.out.println("  -e, --exit [STATE]\t\tSpecifies exit state.");
         System.out.println("  -h, --help\t\tPrints this help message.");
-        //System.out.println("  -i, --interactive\tRuns in interactive mode.");
-        //System.out.println("  -n, --number [INT]\tProcesses [INT] number of months.");
-        System.out.println("  -s, --search\t\tSpecifies the search type:\r\n\t\t\tBDF - Breadth First Search\r\n\t\t\tDFS - Depth First Search\r\n\t\t\tIDS - Iterative Deepening Search\r\n\t\t\tA* - A* Heuristic Search");
-        //System.out.println("  -o, --output [FILE]\tWhen simulation is complete, saves zoo state to [FILE]. Will overwrite existing files. \n\t\t\tIf no file is specified, will output to stdout. Implies -b, requires -n.");
+        System.out.println("  -s, --start [STATE]\t\tSpecifies the start state");
+        System.out.println("  -t, --type\t\tSpecifies the search type:\r\n\t\t\tBFS - Breadth First Search\r\n\t\t\tDFS - Depth First Search\r\n\t\t\tIDS - Iterative Deepening Search\r\n\t\t\tA* - A* Heuristic Search");
         //System.out.println("  -v, --version\t\tPrints version.");
     }
 
-    private static void search(String type){
+    private static void search(String type) {
         Search search;
-        switch(type){
-            case "BDF":
-                search = new BDF();
+        switch (type) {
+            case "BFS":
+                search = new BFS();
 
                 search.run();
                 break;
@@ -79,6 +77,36 @@ public class BlocksWorld {
             default:
                 header();
                 System.out.println(String.format("Option '%s' was not recognised.", type));
+        }
+    }
+
+    private static Grid parseState(String state) throws ParseException {
+        List<String> substrs = Arrays.asList(state.split("|"));
+        try {
+            int width = Integer.parseInt(substrs.get(0));
+            int height = Integer.parseInt(substrs.get(1));
+            Grid g = GridController.createGrid(width, height);
+
+            String row;
+            char symbol;
+            for (int i = 2; i < substrs.size(); i++) {
+                row = substrs.get(i);
+                for (int x = 0; x < g.getWidth(); x++) {
+                    symbol = row.charAt(x);
+                    try {
+                        if (symbol >= 'a' && symbol <= 'z') {
+                            g.placeBlock(symbol, new Position(x, i - 2));
+                        } else if (symbol == '*') {
+                            g.placeAgent(x, i - 2);
+                        }
+                    } catch (InvalidPositionException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return g;
+        } catch (NumberFormatException ex) {
+            throw new ParseException(ex.getMessage(), 0);
         }
     }
 }

@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class BlocksWorld {
 
+    Search searcher;
+
     public static void main(String[] args) {
         List<String> argList = Arrays.asList(args);
 
@@ -35,6 +37,8 @@ public class BlocksWorld {
             header();
         }
     }
+
+
 
     /**
      * Prints out programme header info
@@ -57,7 +61,7 @@ public class BlocksWorld {
         //System.out.println("  -v, --version\t\tPrints version.");
     }
 
-    private static void search(String type) {
+    private static void search(String type, Grid startState, Grid exitState) {
         Search search;
         switch (type) {
             case "BFS":
@@ -79,6 +83,7 @@ public class BlocksWorld {
                 System.out.println(String.format("Option '%s' was not recognised.", type));
         }
     }
+
 
     private static Grid parseState(String state) throws ParseException {
         List<String> substrs = Arrays.asList(state.split("|"));

@@ -1,6 +1,5 @@
 package blocksworld;
 
-import blocksworld.exceptions.InvalidBlockIDException;
 import blocksworld.exceptions.InvalidDirectionException;
 import blocksworld.exceptions.InvalidPositionException;
 

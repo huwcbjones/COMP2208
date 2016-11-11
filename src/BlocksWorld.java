@@ -1,10 +1,11 @@
 import blocksworld.Grid;
 import blocksworld.GridController;
+import blocksworld.Pair;
 import blocksworld.Position;
-import blocksworld.Search;
 import blocksworld.exceptions.InvalidPositionException;
 import blocksworld.search.BFS;
 import blocksworld.search.DFS;
+import blocksworld.search.Search;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -18,27 +19,65 @@ import java.util.List;
  */
 public class BlocksWorld {
 
-    Search searcher;
-
     public static void main(String[] args) {
         List<String> argList = Arrays.asList(args);
 
-        if (argList.contains("--help") || argList.contains("-h")) {
-            help();
-        } else if (argList.contains("--type") || argList.contains("-t")) {
+        BlocksWorld.header();
+
+        try {
+            if (argList.contains("--help")) {
+                help();
+                return;
+            }
+
+            int width = -1;
+            int height = -1;
+            if (argList.contains("--height") || argList.contains("-h")) {
+                int index = (argList.contains("-h")) ? argList.indexOf("-h") : argList.indexOf("--height");
+                height = getInt(argList, index);
+            }
+            if (argList.contains("--width") || argList.contains("-w")) {
+                int index = (argList.contains("-w")) ? argList.indexOf("-w") : argList.indexOf("--width");
+                width = getInt(argList, index);
+            }
+
+            if (width == -1 || height == -1) {
+                System.out.println("Please specify width/height.");
+                return;
+            }
+
+            if (!argList.contains("--type") && !argList.contains("-t")) {
+                System.out.println("Please specify a search type. (See help for more details)");
+                return;
+            }
+
             int index = (argList.contains("-t")) ? argList.indexOf("-t") : argList.indexOf("--type");
             try {
+
                 String type = argList.get(index + 1);
-                search(type);
+                Grid startGrid = null;
+                Grid exitGrid = null;
+                if (argList.contains("--start") || argList.contains("-s")){
+                    int startIndex = (argList.contains("-s")) ? argList.indexOf("-s") : argList.indexOf("--start");
+                    startGrid = parseState(argList.get(startIndex + 1), width, height);
+                }
+                if(argList.contains("--exit") || argList.contains("-e")) {
+                    int exitIndex = (argList.contains("-e")) ? argList.indexOf("-e") : argList.indexOf("--exit");
+                    exitGrid = parseState(argList.get(exitIndex + 1), width, height);
+                }
+
+                search(type, startGrid, exitGrid);
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("No option was specified for " + argList.get(index));
             }
-        } else {
-            header();
+        } catch (ParseException ex) {
+            System.out.println("Failed to read input: " + ex.getMessage());
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            System.out.println("No argument specified: " + ex.getMessage());
+        } catch (IllegalArgumentException ex) {
+            System.out.println("No input provided for option: " + ex.getMessage());
         }
     }
-
-
 
     /**
      * Prints out programme header info
@@ -54,42 +93,30 @@ public class BlocksWorld {
     private static void help() {
         BlocksWorld.header();
         System.out.println("Arguments:");
-        System.out.println("  -e, --exit [STATE]\t\tSpecifies exit state.");
-        System.out.println("  -h, --help\t\tPrints this help message.");
-        System.out.println("  -s, --start [STATE]\t\tSpecifies the start state");
+        System.out.println("  -e, --exit [STATE]\tSpecifies exit state.");
+        System.out.println("  -h, --height\t\tSets the grid height.");
+        System.out.println("       --help\t\tPrints this help message.");
+        System.out.println("  -s, --start [STATE]\tSpecifies the start state");
         System.out.println("  -t, --type\t\tSpecifies the search type:\r\n\t\t\tBFS - Breadth First Search\r\n\t\t\tDFS - Depth First Search\r\n\t\t\tIDS - Iterative Deepening Search\r\n\t\t\tA* - A* Heuristic Search");
-        //System.out.println("  -v, --version\t\tPrints version.");
+        System.out.println("  -w, --width\t\tSets the grid width.");
     }
 
-    private static void search(String type, Grid startState, Grid exitState) {
-        Search search;
-        switch (type) {
-            case "BFS":
-                search = new BFS();
-
-                search.run();
-                break;
-            case "DFS":
-                search = new DFS();
-
-                search.run();
-                break;
-            case "IDS":
-                break;
-            case "A*":
-                break;
-            default:
-                header();
-                System.out.println(String.format("Option '%s' was not recognised.", type));
+    private static int getInt(List<String> args, int argIndex) throws ParseException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+        String widthStr = args.get(argIndex + 1);
+        if (widthStr.substring(0, 1).equals("'")) {
+            throw new IllegalArgumentException("No option was specified for " + args.get(argIndex));
         }
+        return Integer.parseInt(widthStr);
     }
 
-
-    private static Grid parseState(String state) throws ParseException {
-        List<String> substrs = Arrays.asList(state.split("|"));
+    private static Grid parseState(String state, int src_width, int src_height) throws ParseException {
+        List<String> substrs = Arrays.asList(state.split(":"));
         try {
             int width = Integer.parseInt(substrs.get(0));
             int height = Integer.parseInt(substrs.get(1));
+            if(width != src_width || height != src_height){
+                throw new ParseException("Height/Width in state does not match provided height/width.", 0);
+            }
             Grid g = GridController.createGrid(width, height);
 
             String row;
@@ -113,5 +140,34 @@ public class BlocksWorld {
         } catch (NumberFormatException ex) {
             throw new ParseException(ex.getMessage(), 0);
         }
+    }
+
+    private static void search(String type, Grid startState, Grid exitState) {
+        Search search = null;
+        switch (type) {
+            case "BFS":
+                search = new BFS();
+                break;
+            case "DFS":
+                search = new DFS();
+                break;
+            case "IDS":
+                break;
+            case "A*":
+                break;
+            default:
+                header();
+                System.out.println(String.format("Type '%s' was not recognised.", type));
+                return;
+        }
+        if (search == null) return;
+        if (startState != null) {
+            search.setStartState(startState);
+        }
+        if (exitState != null) {
+            search.setExitState(exitState);
+        }
+
+        search.run();
     }
 }

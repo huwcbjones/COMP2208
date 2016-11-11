@@ -1,7 +1,5 @@
 package blocksworld;
 
-import blocksworld.GridController.DIRECTION;
-
 /**
  * Node of Moves
  *
@@ -12,11 +10,9 @@ public class Node {
 
     private Grid grid = null;
     private Node parent;
-    private DIRECTION direction;
 
-    public Node(Node parent, DIRECTION direction) {
+    public Node(Node parent){
         this.parent = parent;
-        this.direction = direction;
     }
 
     public Grid getGrid() {
@@ -29,9 +25,5 @@ public class Node {
 
     public Node getParent() {
         return parent;
-    }
-
-    public DIRECTION getDirection() {
-        return direction;
     }
 }

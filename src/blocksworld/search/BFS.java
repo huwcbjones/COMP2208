@@ -4,7 +4,7 @@ import blocksworld.Grid;
 import blocksworld.GridController;
 import blocksworld.GridController.DIRECTION;
 import blocksworld.Node;
-import blocksworld.Search;
+import blocksworld.Pair;
 import blocksworld.exceptions.InvalidDirectionException;
 
 import java.util.Queue;
@@ -18,51 +18,55 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class BFS extends Search {
 
-    private Queue<Node> nodeQueue;
+    private Queue<Pair<Node, DIRECTION>> nodeQueue;
     private Node rootNode;
 
     @Override
     protected void preRun() {
         this.nodeQueue = new ConcurrentLinkedQueue<>();
-        this.rootNode = new Node(null, null);
+        this.rootNode = new Node(null);
         this.rootNode.setGrid(this.startGrid);
-        this.nodeQueue.add(this.rootNode);
     }
 
     @Override
     protected void runSearch() {
-        int numberOfNodes = 0;
-        Node currentNode = nodeQueue.poll();
-        Grid currentGrid = currentNode.getGrid();
-        while ((!this.checkExitCondition(currentGrid))) {
+        currentNode = rootNode;
+        DIRECTION currentDirection = null;
+        Pair<Node, DIRECTION> currentPair;
+
+        while (true) {
 
             numberOfNodes++;
-            if (currentNode.getDirection() != null) {
+            if (currentDirection != null) {
                 try {
-                    currentGrid = GridController.move(currentNode.getParent().getGrid(), currentNode.getDirection());
-                    currentNode.setGrid(currentGrid);
+                    currentNode.setGrid(
+                            GridController.move(
+                                    currentNode.getParent().getGrid(),
+                                    currentDirection
+                            )
+                    );
+                    if (this.checkExitCondition(currentNode.getGrid())) {
+                        break;
+                    }
                 } catch (InvalidDirectionException e) {
+                    currentPair = nodeQueue.poll();
+                    currentNode = currentPair.getKey();
+                    currentDirection = currentPair.getValue();
                     continue;
                 }
             }
 
-            if (this.checkExitCondition(currentNode.getGrid())) {
-                break;
+            for (DIRECTION direction : DIRECTION.values()) {
+                nodeQueue.add(new Pair<>(new Node(currentNode), direction));
             }
-
-            Node n;
-            for (DIRECTION d : DIRECTION.values()) {
-                if (GridController.canMove(currentGrid, d)) {
-                    n = new Node(currentNode, d);
-                    n.setGrid(currentNode.getGrid());
-                    nodeQueue.add(n);
-                }
-            }
-            currentNode = nodeQueue.poll();
+            currentPair = nodeQueue.poll();
+            currentNode = currentPair.getKey();
+            currentDirection = currentPair.getValue();
         }
 
-        System.out.println("Found solution. Expanded " + numberOfNodes);
+        System.out.println("\r\nFound solution. Expanded " + numberOfNodes);
 
-        //System.out.println("Solution as follows:");
+        System.out.println("Solution as follows:");
+        System.out.println(this.getSolution(currentNode));
     }
 }

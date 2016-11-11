@@ -4,14 +4,10 @@ import blocksworld.Grid;
 import blocksworld.GridController;
 import blocksworld.GridController.DIRECTION;
 import blocksworld.Node;
-import blocksworld.Search;
+import blocksworld.Pair;
 import blocksworld.exceptions.InvalidDirectionException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Stack;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.*;
 
 /**
  * {DESCRIPTION}
@@ -22,56 +18,63 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class DFS extends Search {
 
 
-    private Stack<Node> nodeStack;
+    private Stack<Pair<Node, DIRECTION>> nodeStack;
     private Node rootNode;
 
     @Override
     protected void preRun() {
         this.nodeStack = new Stack<>();
-        this.rootNode = new Node(null, null);
+        this.rootNode = new Node(null);
         this.rootNode.setGrid(this.startGrid);
-        this.nodeStack.add(this.rootNode);
     }
 
     @Override
     protected void runSearch() {
-        int numberOfNodes = 0;
-        Node currentNode = nodeStack.pop();
-        Grid currentGrid = currentNode.getGrid();
-        while ((!this.checkExitCondition(currentGrid))) {
+        // Init
+        ArrayList<DIRECTION> directions = new ArrayList<>(4);
+        Arrays.stream(DIRECTION.values()).forEach(directions::add);
+
+        currentNode = rootNode;
+        Pair<Node, DIRECTION> currentPair;
+        DIRECTION currentDirection = null;
+
+        while (true) {
 
             numberOfNodes++;
-            if (currentNode.getDirection() != null) {
+
+            if (currentDirection != null) {
                 try {
-                    currentGrid = GridController.move(currentNode.getParent().getGrid(), currentNode.getDirection());
-                    currentNode.setGrid(currentGrid);
+                    currentNode.setGrid(
+                            GridController.move(
+                                currentNode.getParent().getGrid(),
+                                currentDirection
+                            )
+                    );
+                    if (this.checkExitCondition(currentNode.getGrid())) {
+                        break;
+                    }
                 } catch (InvalidDirectionException e) {
+                    currentPair = nodeStack.pop();
+                    currentNode = currentPair.getKey();
+                    currentDirection = currentPair.getValue();
                     continue;
                 }
             }
 
-            if (this.checkExitCondition(currentNode.getGrid())) {
-                break;
+            Collections.shuffle(directions, new Random(this.randomSeed));
+
+            for(DIRECTION direction: directions){
+                nodeStack.push(new Pair<>(new Node(currentNode), direction));
             }
 
-            ArrayList<DIRECTION> directions = new ArrayList<>(4);
-            Arrays.stream(DIRECTION.values()).forEach(directions::add);
-
-            Node n;
-            DIRECTION direction;
-            while (directions.size() != 0) {
-                direction = directions.get(this.random.nextInt(directions.size()) - 1);
-                if (GridController.canMove(currentGrid, direction)) {
-                    n = new Node(currentNode, direction);
-                    n.setGrid(currentNode.getGrid());
-                    nodeStack.push(n);
-                }
-            }
-            currentNode = nodeStack.pop();
+            currentPair = nodeStack.pop();
+            currentNode = currentPair.getKey();
+            currentDirection = currentPair.getValue();
         }
 
         System.out.println("Found solution. Expanded " + numberOfNodes);
 
-        //System.out.println("Solution as follows:");
+        System.out.println("Solution as follows:");
+        System.out.println(this.getSolution(currentNode));
     }
 }

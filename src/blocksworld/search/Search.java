@@ -94,6 +94,18 @@ public abstract class Search {
 
     protected void completed(){
         this.completed = true;
+        System.out.println("Solution found.");
+        System.out.println("Expanded " + numberOfNodes);
+
+        System.out.println("Solution as follows:");
+        System.out.println(this.getSolution(currentNode));
+
+        System.out.println("Start State:");
+        System.out.println(this.startGrid.toString());
+        System.out.println("Exit State:");
+        System.out.println(this.exitGrid.toString());
+        System.out.println("Random Seed:");
+        System.out.println(this.randomSeed);
     }
     abstract protected void preRun();
 

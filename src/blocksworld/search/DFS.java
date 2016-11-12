@@ -24,7 +24,7 @@ public class DFS extends Search {
     @Override
     protected void preRun() {
         this.nodeStack = new Stack<>();
-        this.rootNode = new Node(null);
+        this.rootNode = Node.createRootNode();
         this.rootNode.setGrid(this.startGrid);
     }
 
@@ -72,10 +72,5 @@ public class DFS extends Search {
             currentNode = currentPair.getKey();
             currentDirection = currentPair.getValue();
         }
-
-        System.out.println("Found solution. Expanded " + numberOfNodes);
-
-        System.out.println("Solution as follows:");
-        System.out.println(this.getSolution(currentNode));
     }
 }

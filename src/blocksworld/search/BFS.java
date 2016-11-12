@@ -24,7 +24,7 @@ public class BFS extends Search {
     @Override
     protected void preRun() {
         this.nodeQueue = new ConcurrentLinkedQueue<>();
-        this.rootNode = new Node(null);
+        this.rootNode = Node.createRootNode();
         this.rootNode.setGrid(this.startGrid);
     }
 
@@ -64,10 +64,5 @@ public class BFS extends Search {
             currentNode = currentPair.getKey();
             currentDirection = currentPair.getValue();
         }
-
-        System.out.println("\r\nFound solution. Expanded " + numberOfNodes);
-
-        System.out.println("Solution as follows:");
-        System.out.println(this.getSolution(currentNode));
     }
 }

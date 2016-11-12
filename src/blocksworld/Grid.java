@@ -164,16 +164,19 @@ public class Grid {
     @Override
     public String toString() {
         String grid = "";
-        Character block;
-        for (int y = 0; y < this.width; y++) {
-            for (int x = 0; x < this.height; x++) {
-                block = this.grid[x][y];
-                grid += (block != Character.MIN_VALUE) ? block : "-";
+        try {
+            Character block;
+            for (int y = 0; y < this.height; y++) {
+                for (int x = 0; x < this.width; x++) {
+                    block = this.grid[x][y];
+                    grid += (block != Character.MIN_VALUE) ? block : "-";
 
+                }
+                grid += "\n";
             }
-            grid += "\n";
+        } catch (Exception ex){
+            ex.printStackTrace();
         }
-
         return grid;
     }
 }

@@ -32,6 +32,7 @@ public class BlocksWorld {
 
             int width = -1;
             int height = -1;
+            Long seed = null;
             if (argList.contains("--height") || argList.contains("-h")) {
                 int index = (argList.contains("-h")) ? argList.indexOf("-h") : argList.indexOf("--height");
                 height = getInt(argList, index);
@@ -44,6 +45,11 @@ public class BlocksWorld {
             if (width == -1 || height == -1) {
                 System.out.println("Please specify width/height.");
                 return;
+            }
+
+            if (argList.contains("--ran") || argList.contains("-r")) {
+                int index = (argList.contains("-r")) ? argList.indexOf("-r") : argList.indexOf("--ran");
+                seed = getSeed(argList, index);
             }
 
             if (!argList.contains("--type") && !argList.contains("-t")) {
@@ -66,7 +72,7 @@ public class BlocksWorld {
                     exitGrid = parseState(argList.get(exitIndex + 1), width, height);
                 }
 
-                search(type, startGrid, exitGrid);
+                search(type, startGrid, exitGrid, seed);
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("No option was specified for " + argList.get(index));
             }
@@ -96,6 +102,7 @@ public class BlocksWorld {
         System.out.println("  -e, --exit [STATE]\tSpecifies exit state.");
         System.out.println("  -h, --height\t\tSets the grid height.");
         System.out.println("       --help\t\tPrints this help message.");
+        System.out.println("  -r, --ran [STATE]\tSpecifies the seed used for the pseudo-random number.");
         System.out.println("  -s, --start [STATE]\tSpecifies the start state");
         System.out.println("  -t, --type\t\tSpecifies the search type:\r\n\t\t\tBFS - Breadth First Search\r\n\t\t\tDFS - Depth First Search\r\n\t\t\tIDS - Iterative Deepening Search\r\n\t\t\tA* - A* Heuristic Search");
         System.out.println("  -w, --width\t\tSets the grid width.");
@@ -107,6 +114,11 @@ public class BlocksWorld {
             throw new IllegalArgumentException("No option was specified for " + args.get(argIndex));
         }
         return Integer.parseInt(widthStr);
+    }
+
+    private static long getSeed(List<String> args, int argIndex) throws ParseException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+        String seedStr = args.get(argIndex + 1);
+        return Long.parseLong(seedStr);
     }
 
     private static Grid parseState(String state, int src_width, int src_height) throws ParseException {
@@ -142,7 +154,7 @@ public class BlocksWorld {
         }
     }
 
-    private static void search(String type, Grid startState, Grid exitState) {
+    private static void search(String type, Grid startState, Grid exitState, Long seed) {
         Search search = null;
         switch (type) {
             case "BFS":
@@ -167,7 +179,9 @@ public class BlocksWorld {
         if (exitState != null) {
             search.setExitState(exitState);
         }
-
+        if(seed != null){
+            search.setSeed(seed);
+        }
         search.run();
     }
 }

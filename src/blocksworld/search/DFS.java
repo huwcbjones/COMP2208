@@ -51,6 +51,7 @@ public class DFS extends Search {
                             )
                     );
                     if (this.checkExitCondition(currentNode.getGrid())) {
+                        completed();
                         break;
                     }
                 } catch (InvalidDirectionException e) {
@@ -61,7 +62,7 @@ public class DFS extends Search {
                 }
             }
 
-            Collections.shuffle(directions, new Random(this.randomSeed));
+            Collections.shuffle(directions, this.random);
 
             for(DIRECTION direction: directions){
                 nodeStack.push(new Pair<>(new Node(currentNode), direction));

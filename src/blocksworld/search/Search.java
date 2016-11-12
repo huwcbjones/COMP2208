@@ -31,6 +31,7 @@ public abstract class Search {
     private long startTime;
 
     public Search() {
+        this.randomSeed = new Random().nextLong();
         this.buildGrid();
         this.createExitGrid();
         Runtime.getRuntime().addShutdownHook(new Thread(){
@@ -65,26 +66,35 @@ public abstract class Search {
         }
     }
 
+    public void setSeed(long seed){
+        this.randomSeed = seed;
+    }
+
     public void run() {
         System.out.println("Creating random seed...");
-        this.randomSeed = new Random().nextLong();
         this.random = new Random(this.randomSeed);
         System.out.println(String.format("Random seed: %d.", this.randomSeed));
         System.out.println("Running Search::preRun");
         this.preRun();
+        System.out.println("Start State:");
+        System.out.println(this.startGrid.toString());
+        System.out.println("Exit State:");
+        System.out.println(this.exitGrid.toString());
         System.out.println("Running Search::runSearch");
         try {
             Thread t = new Thread(new Monitor(), "MonitorThread");
             t.start();
             this.startTime = System.nanoTime();
             this.runSearch();
-            this.completed = true;
         } catch (Exception ex) {
             System.out.println("Error running search.");
             ex.printStackTrace();
         }
     }
 
+    protected void completed(){
+        this.completed = true;
+    }
     abstract protected void preRun();
 
     abstract protected void runSearch();

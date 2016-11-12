@@ -46,6 +46,7 @@ public class BFS extends Search {
                             )
                     );
                     if (this.checkExitCondition(currentNode.getGrid())) {
+                        completed();
                         break;
                     }
                 } catch (InvalidDirectionException e) {

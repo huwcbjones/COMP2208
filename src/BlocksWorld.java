@@ -5,6 +5,7 @@ import blocksworld.Position;
 import blocksworld.exceptions.InvalidPositionException;
 import blocksworld.search.BFS;
 import blocksworld.search.DFS;
+import blocksworld.search.IDS;
 import blocksworld.search.Search;
 
 import java.text.ParseException;
@@ -164,6 +165,7 @@ public class BlocksWorld {
                 search = new DFS();
                 break;
             case "IDS":
+                search = new IDS();
                 break;
             case "A*":
                 break;

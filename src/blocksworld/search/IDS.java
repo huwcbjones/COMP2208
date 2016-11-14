@@ -1,6 +1,7 @@
 package blocksworld.search;
 
 import blocksworld.GridController;
+import blocksworld.GridController.DIRECTION;
 import blocksworld.Node;
 import blocksworld.Pair;
 import blocksworld.exceptions.InvalidDirectionException;
@@ -18,43 +19,42 @@ import java.util.Stack;
  */
 public class IDS extends Search {
 
-    private Stack<Pair<Node, GridController.DIRECTION>> nodeStack;
+    private Stack<Pair<Node, DIRECTION>> nodeStack;
     private Node rootNode;
+    private ArrayList<DIRECTION> directions;
+    private int depth;
+
+    private Node currentNode;
+    private Pair<Node, DIRECTION> currentPair;
+    private DIRECTION currentDirection = null;
 
     @Override
     protected void preRun() {
         this.nodeStack = new Stack<>();
         this.rootNode = Node.createRootNode();
         this.rootNode.setGrid(this.startGrid);
+        directions = new ArrayList<>(4);
+        Arrays.stream(DIRECTION.values()).forEach(directions::add);
+
+        currentNode = rootNode;
+        currentPair = null;
+        currentDirection = null;
     }
 
     @Override
     protected void runSearch() {
-        // Init
-        ArrayList<GridController.DIRECTION> directions = new ArrayList<>(4);
-        Arrays.stream(GridController.DIRECTION.values()).forEach(directions::add);
-
-        currentNode = rootNode;
-        Pair<Node, GridController.DIRECTION> currentPair;
-        GridController.DIRECTION currentDirection = null;
-
-        int depth = 0;
-
         while (true) {
 
-            numberOfNodes++;
-
-            if (currentNode.getDepth() >= depth) {
+            if (currentNode.getDepth() > depth) {
                 if(this.nodeStack.size() == 0) {
-                    preRun();
-                    depth++;
-                    continue;
+                    increaseDepth();
                 } else {
-                    currentPair = nodeStack.pop();
-                    currentNode = currentPair.getKey();
-                    currentDirection = currentPair.getValue();
+                    nextNode();
                 }
+                continue;
             }
+
+            numberOfNodes++;
 
             if (currentDirection != null) {
                 try {
@@ -65,26 +65,40 @@ public class IDS extends Search {
                             )
                     );
                     if (this.checkExitCondition(currentNode.getGrid())) {
-                        completed();
+                        completed(currentNode);
                         break;
                     }
                 } catch (InvalidDirectionException e) {
-                    currentPair = nodeStack.pop();
-                    currentNode = currentPair.getKey();
-                    currentDirection = currentPair.getValue();
+                    if(nodeStack.size() == 0){
+                        increaseDepth();
+                    } else {
+                        nextNode();
+                    }
                     continue;
                 }
             }
 
             Collections.shuffle(directions, this.random);
 
-            for (GridController.DIRECTION direction : directions) {
+            for (DIRECTION direction : directions) {
                 nodeStack.push(new Pair<>(new Node(currentNode), direction));
             }
 
-            currentPair = nodeStack.pop();
-            currentNode = currentPair.getKey();
-            currentDirection = currentPair.getValue();
+            nextNode();
         }
+        System.out.println("Max Iterative Depth:");
+        System.out.println(depth);
+    }
+
+    private void increaseDepth(){
+        preRun();
+        depth++;
+        System.out.println("\r\nDepth increased: "+ depth);
+    }
+
+    private void nextNode(){
+        currentPair = nodeStack.pop();
+        currentNode = currentPair.getKey();
+        currentDirection = currentPair.getValue();
     }
 }

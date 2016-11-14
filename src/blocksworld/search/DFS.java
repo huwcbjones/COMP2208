@@ -51,7 +51,7 @@ public class DFS extends Search {
                             )
                     );
                     if (this.checkExitCondition(currentNode.getGrid())) {
-                        completed();
+                        completed(currentNode);
                         break;
                     }
                 } catch (InvalidDirectionException e) {

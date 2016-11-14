@@ -83,6 +83,7 @@ public abstract class Search {
         System.out.println("Running Search::runSearch");
         try {
             Thread t = new Thread(new Monitor(), "MonitorThread");
+            t.setDaemon(true);
             t.start();
             this.startTime = System.nanoTime();
             this.runSearch();
@@ -92,13 +93,13 @@ public abstract class Search {
         }
     }
 
-    protected void completed(){
+    protected void completed(Node exitNode){
         this.completed = true;
         System.out.println("Solution found.");
         System.out.println("Expanded " + numberOfNodes);
 
         System.out.println("Solution as follows:");
-        System.out.println(this.getSolution(currentNode));
+        System.out.println(this.getSolution(exitNode));
 
         System.out.println("Start State:");
         System.out.println(this.startGrid.toString());
@@ -109,7 +110,7 @@ public abstract class Search {
     }
     abstract protected void preRun();
 
-    abstract protected void runSearch();
+    abstract protected void runSearch() throws Exception;
 
     public String getSolution(Node endNode) {
         Stack<String> states = new Stack<>();

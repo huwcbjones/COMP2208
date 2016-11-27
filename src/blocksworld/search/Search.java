@@ -38,7 +38,7 @@ public abstract class Search {
         Runtime.getRuntime().addShutdownHook(new Thread(){
             @Override
             public void run() {
-                System.out.print("\r\n\r\n\r\n\r\n");
+                System.out.print("\r\n\r\n");
             }
         });
     }
@@ -96,18 +96,25 @@ public abstract class Search {
 
     protected void completed(Node exitNode){
         this.completed = true;
+        System.out.println("\r\n\r\n================================");
         System.out.println("Solution found.");
-        System.out.println("Expanded " + numberOfNodes);
 
         System.out.println("Solution as follows:");
         System.out.println(this.getSolution(exitNode));
 
-        System.out.println("Start State:");
+        System.out.println("\r\n================================");
+        System.out.println("Start State:\r\n");
         System.out.println(this.startGrid.toString());
-        System.out.println("Exit State:");
+        System.out.println("================================");
+        System.out.println("Exit State:\r\n");
         System.out.println(this.exitGrid.toString());
+        System.out.println("================================");
         System.out.println("Random Seed:");
         System.out.println(this.randomSeed);
+        System.out.println("================================");
+        System.out.println("Nodes Expanded:");
+        System.out.println(this.numberOfNodes);
+        System.out.println("================================");
     }
     abstract protected void preRun();
 

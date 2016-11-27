@@ -1,9 +1,6 @@
 package blocksworld.search;
 
-import blocksworld.Block;
-import blocksworld.Grid;
-import blocksworld.GridController;
-import blocksworld.Node;
+import blocksworld.*;
 import blocksworld.exceptions.InvalidPositionException;
 
 import java.text.NumberFormat;
@@ -25,10 +22,14 @@ public abstract class Search {
     protected long randomSeed;
     protected Random random;
     protected int numberOfNodes = 0;
-    protected Node currentNode;
-    private Grid exitGrid;
+    protected Grid exitGrid;
     private boolean completed = false;
     private long startTime;
+
+    protected Node rootNode;
+    protected Node currentNode;
+    protected Pair<Node, GridController.DIRECTION> currentPair;
+    protected GridController.DIRECTION currentDirection = null;
 
     public Search() {
         this.randomSeed = new Random().nextLong();
@@ -192,4 +193,6 @@ public abstract class Search {
             }
         }
     }
+
+    protected abstract void nextNode();
 }

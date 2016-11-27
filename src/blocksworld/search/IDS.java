@@ -20,13 +20,8 @@ import java.util.Stack;
 public class IDS extends Search {
 
     private Stack<Pair<Node, DIRECTION>> nodeStack;
-    private Node rootNode;
     private ArrayList<DIRECTION> directions;
     private int depth;
-
-    private Node currentNode;
-    private Pair<Node, DIRECTION> currentPair;
-    private DIRECTION currentDirection = null;
 
     @Override
     protected void preRun() {
@@ -90,15 +85,16 @@ public class IDS extends Search {
         System.out.println(depth);
     }
 
+    @Override
+    protected void nextNode() {
+        currentPair = nodeStack.pop();
+        currentNode = currentPair.getKey();
+        currentDirection = currentPair.getValue();
+    }
+
     private void increaseDepth(){
         preRun();
         depth++;
         System.out.println("\r\nDepth increased: "+ depth);
-    }
-
-    private void nextNode(){
-        currentPair = nodeStack.pop();
-        currentNode = currentPair.getKey();
-        currentDirection = currentPair.getValue();
     }
 }

@@ -17,9 +17,7 @@ import java.util.*;
  */
 public class DFS extends Search {
 
-
     private Stack<Pair<Node, DIRECTION>> nodeStack;
-    private Node rootNode;
 
     @Override
     protected void preRun() {
@@ -35,9 +33,6 @@ public class DFS extends Search {
         Arrays.stream(DIRECTION.values()).forEach(directions::add);
 
         currentNode = rootNode;
-        Pair<Node, DIRECTION> currentPair;
-        DIRECTION currentDirection = null;
-
         while (true) {
 
             numberOfNodes++;
@@ -55,9 +50,7 @@ public class DFS extends Search {
                         break;
                     }
                 } catch (InvalidDirectionException e) {
-                    currentPair = nodeStack.pop();
-                    currentNode = currentPair.getKey();
-                    currentDirection = currentPair.getValue();
+                    nextNode();
                     continue;
                 }
             }
@@ -68,9 +61,14 @@ public class DFS extends Search {
                 nodeStack.push(new Pair<>(new Node(currentNode), direction));
             }
 
-            currentPair = nodeStack.pop();
-            currentNode = currentPair.getKey();
-            currentDirection = currentPair.getValue();
+            nextNode();
         }
+    }
+
+    @Override
+    protected void nextNode() {
+        currentPair = nodeStack.pop();
+        currentNode = currentPair.getKey();
+        currentDirection = currentPair.getValue();
     }
 }

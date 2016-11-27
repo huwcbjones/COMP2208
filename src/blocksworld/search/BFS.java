@@ -19,7 +19,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class BFS extends Search {
 
     private Queue<Pair<Node, DIRECTION>> nodeQueue;
-    private Node rootNode;
 
     @Override
     protected void preRun() {
@@ -30,9 +29,8 @@ public class BFS extends Search {
 
     @Override
     protected void runSearch() {
-        currentNode = rootNode;
-        DIRECTION currentDirection = null;
-        Pair<Node, DIRECTION> currentPair;
+
+        this.currentNode = rootNode;
 
         while (true) {
 
@@ -50,9 +48,7 @@ public class BFS extends Search {
                         break;
                     }
                 } catch (InvalidDirectionException e) {
-                    currentPair = nodeQueue.poll();
-                    currentNode = currentPair.getKey();
-                    currentDirection = currentPair.getValue();
+                    nextNode();
                     continue;
                 }
             }
@@ -60,9 +56,14 @@ public class BFS extends Search {
             for (DIRECTION direction : DIRECTION.values()) {
                 nodeQueue.add(new Pair<>(new Node(currentNode), direction));
             }
-            currentPair = nodeQueue.poll();
-            currentNode = currentPair.getKey();
-            currentDirection = currentPair.getValue();
+            nextNode();
         }
+    }
+
+    @Override
+    protected void nextNode() {
+        currentPair = nodeQueue.poll();
+        currentNode = currentPair.getKey();
+        currentDirection = currentPair.getValue();
     }
 }

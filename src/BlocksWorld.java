@@ -3,10 +3,7 @@ import blocksworld.GridController;
 import blocksworld.Pair;
 import blocksworld.Position;
 import blocksworld.exceptions.InvalidPositionException;
-import blocksworld.search.BFS;
-import blocksworld.search.DFS;
-import blocksworld.search.IDS;
-import blocksworld.search.Search;
+import blocksworld.search.*;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -168,6 +165,7 @@ public class BlocksWorld {
                 search = new IDS();
                 break;
             case "A*":
+                search = new AStar();
                 break;
             default:
                 header();

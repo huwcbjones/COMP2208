@@ -20,4 +20,11 @@ public class Position extends Pair<Integer, Integer> {
     public int getY(){
         return this.getValue();
     }
+
+    public Position subtract(Position position){
+        return new Position(
+                this.getX() - position.getX(),
+                this.getY() - position.getY()
+        );
+    }
 }

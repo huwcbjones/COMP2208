@@ -11,21 +11,24 @@ public class Node {
     private Grid grid = null;
     private Node parent;
     private int depth;
-
-    public static Node createRootNode(){
-          return new Node();
-    }
+    private Integer priority = null;
 
     private Node() {
         this.depth = 0;
     }
 
-    public Node(Node parent){
+    public Node(Node parent) {
         this.parent = parent;
         this.depth = parent.getDepth() + 1;
     }
 
-    public int getDepth() { return depth; }
+    public int getDepth() {
+        return depth;
+    }
+
+    public static Node createRootNode() {
+        return new Node();
+    }
 
     public Grid getGrid() {
         return grid;
@@ -33,6 +36,16 @@ public class Node {
 
     public void setGrid(Grid grid) {
         if (grid != null) this.grid = grid;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        if (this.priority == null) {
+            this.priority = priority;
+        }
     }
 
     public Node getParent() {

@@ -63,13 +63,13 @@ public class AStar extends Search {
 
     private int calculatePriority(Node node) {
         int score = 0;
-        score += getManhattenDistance(node.getGrid());
+        score += getManhattanDistance(node.getGrid());
         score += getTilesInCorrectPlace(node.getGrid());
         score += node.getDepth();
         return score;
     }
 
-    private int getManhattenDistance(Grid grid){
+    private int getManhattanDistance(Grid grid){
         int score = 0;
         ArrayList<Block> blocks = grid.getBlocks();
         for(Block block: blocks){

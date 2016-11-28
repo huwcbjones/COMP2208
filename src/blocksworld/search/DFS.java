@@ -37,7 +37,7 @@ public class DFS extends Search {
         currentNode = rootNode;
         while (true) {
 
-            numberOfNodes++;
+
 
             if (currentDirection != null) {
                 try {
@@ -47,6 +47,7 @@ public class DFS extends Search {
                                     currentDirection
                             )
                     );
+                    numberOfNodes++;
                     if (this.checkExitCondition(currentNode.getGrid())) {
                         completed(currentNode);
                         break;

@@ -36,6 +36,14 @@ public class AStar extends Search {
         this.currentNode = rootNode;
         while_loop:
         while (true) {
+            numberOfNodes++;
+
+            // Check the if the node satisfies the exit condition
+            if (this.checkExitCondition(currentNode.getGrid())) {
+                completed(currentNode);
+                break;
+            }
+
             for (GridController.DIRECTION direction : directions) {
                 try {
                     // Process the move and store the new state in the node
@@ -46,13 +54,6 @@ public class AStar extends Search {
                                     direction
                             )
                     );
-                    numberOfNodes++;
-
-                    // Check the if the node satisfies the exit condition
-                    if (this.checkExitCondition(newNode.getGrid())) {
-                        completed(newNode);
-                        break while_loop;
-                    }
 
                     // Calculate the node heuristic score and add it to the queue
                     newNode.setPriority(

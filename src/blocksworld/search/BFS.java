@@ -37,7 +37,6 @@ public class BFS extends Search {
         this.currentNode = rootNode;
 
         while (true) {
-            numberOfNodes++;
             if (currentDirection != null) {
                 try {
                     currentNode.setGrid(
@@ -46,6 +45,7 @@ public class BFS extends Search {
                                     currentDirection
                             )
                     );
+                    numberOfNodes++;
                     if (this.checkExitCondition(currentNode.getGrid())) {
                         completed(currentNode);
                         break;

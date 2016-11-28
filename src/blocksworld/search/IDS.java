@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Stack;
 
 /**
- * {DESCRIPTION}
+ * Iterative Deepening Search
  *
  * @author Huw Jones
  * @since 12/11/2016
@@ -57,7 +57,7 @@ public class IDS extends Search {
                 continue;
             }
 
-            numberOfNodes++;
+
 
             if (currentDirection != null) {
                 try {
@@ -68,6 +68,7 @@ public class IDS extends Search {
                                     currentDirection
                             )
                     );
+                    numberOfNodes++;
                     // Check if the grid meets the exit condition, if so, exit the search
                     if (this.checkExitCondition(currentNode.getGrid())) {
                         completed(currentNode);

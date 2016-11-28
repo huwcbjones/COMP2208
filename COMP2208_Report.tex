@@ -1,53 +1,154 @@
 \documentclass[a4paper]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=0.8in]{geometry}
 \usepackage[bookmarks]{hyperref}
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{pdfpages}
+\usepackage[style=verbose]{biblatex}
+\usepackage{filecontents}
+\usepackage[super]{nth}
+\usepackage{siunitx}
+\usepackage[inline]{enumitem}
+\usepackage{listings}
+\usepackage{color}
+\usepackage[toc,page]{appendix}
+\usepackage{cleveref}
+
+\crefname{appsec}{Appendix}{Appendices}
+
 \definecolor{col_light_grey}{rgb}{0.9, 0.9, 0.9}
 \definecolor{col_green}{rgb}{0,0.6,0}
 \definecolor{col_grey}{rgb}{0.5,0.5,0.5}
 \definecolor{col_mauve}{rgb}{0.58,0,0.82}
 
-\lstset{
+\lstdefinestyle{none}{
+  basicstyle=\footnotesize,
+  breaklines=true,
+  captionpos=b,
+  tabsize=2
+}
+\lstdefinestyle{default}{
   backgroundcolor=\color{col_light_grey},
   basicstyle=\footnotesize,
   breaklines=true,
   captionpos=b,
   commentstyle=\color{col_green},
-  escapeinside={\%*}{*)},
   keywordstyle=\color{blue},
   stringstyle=\color{col_mauve},
-  tabsize=2,
+  tabsize=2
 }
 \lstset{language=java}
 
+\author{Huw Jones\\27618153\\hcbj1g15@soton.ac.uk}
+\title{COMP2208: Intelligent Systems}
+\def \subtitle {Comparison of Search Methods}
+
+\def \grid {\textbf{Grid}}
+\def \node {\textbf{Node}}
+
 \hypersetup{
-  pdfinfo={
-    Title={COMP2208 Assignment},
-    Author={Huw Jones},
+  pdfinfo={ee
+    Title={\@title},
+    Subtitle={\@subtitle}
+    Author={\@author},
   },
   colorlinks=false,
   pdfborder=0 0 0,
 }
 
+\begin{filecontents}{bib.bib}
+\end{filecontents}
+\addbibresource{bib.bib}
 \pagestyle{headings}
 
-\author{Huw Jones \\27618153}
-\title{COMP2208 Assignment}
-
 \begin{document}
-\maketitle
+\makeatletter
+\begin{titlepage}
+	\centering
+	{\scshape\LARGE University of Southampton \par}
+	\vspace{2cm}
+    {\huge\bfseries \@title \par}
+    \vspace{1cm}
+	{\scshape\huge \subtitle \par}
+	\vspace{3cm}
+    {\Large
+    \begin{tabular}{c}
+      \@author
+    \end{tabular} \\}
+  \vspace{6cm}
+    {\Large
+    \today
+    }
+\end{titlepage}
+\makeatother
 \newpage
 
+%%
+%% SECTION: Approach
+%%
 \section{Approach}
 In order to analyse the differences in scalability, I decided to build a framework that would allow me to minimise the time spent on writing code.
 At the moment, I am most familiar with Java, therefore that is the language I chose to build my solution in.
 My code is nowhere near ``good'' or optimised (in terms of real time running, not nodes expanded), but it works.
 
+\subsection{The Setup}
+I tried to keep data structures simple and minimalistic.
+The state of the puzzle is stored in a \node.
+A {\node} has a {\grid} (which represents the state of the puzzle), a parent node reference, a depth (used for IDS), and a priority (used for A*).
+A {\grid} has a width/height, a 2D array of characters (representing blocks), and a HashMap that maps characters to their position.
+
+\subsection{The Framework}
+I created a framework whereby the program parameters can be manipulated via the command line.
+\begin{lstlisting}
+-e, --exit [STATE]    Specifies exit state.
+-h, --height          Sets the grid height.
+    --help            Prints this help message.
+-r, --ran [LONG]      Specifies the seed used for the pseudo-random number.
+-s, --start [STATE]   Specifies the start state
+-t, --type            Specifies the search type:
+                    		BFS - Breadth First Search
+                    		DFS - Depth First Search
+                    		IDS - Iterative Deepening Search
+                    		A* - A* Heuristic Search
+-w, --width           Sets the grid width.
+\end{lstlisting}
+This framework allowed me to create scripts to automate my searching.
+It also allowed me to inject different start/finish grids, as well as injecting different grid sizes - all without having to rewrite any of my code.
+
+In addition, I allowed the input of the random number seed.
+This helped during debugging my program.
+If a DFS search didn't work with one random number, I could provide the random number and debug that case.
+
+%%
+%% SECTION: Evidence
+%%
 \section{Evidence}
+A {\grid} state is represented in a grid of dimensions $H \times W$.
+The agent is represented by a `\texttt{*}', blanks are represented by `\texttt{-}', and blocks are represented by a lowercase letter.
+In the evidence provided, the number above a {\grid} state is the node number.
+
+\subsection{Breadth First Search}
+\Cref{app:evidence-bfs} shows the order that the program evaluated nodes.
+It is evident that BFS is working correctly as the tiles appear to jump around if the nodes are being read in number order.
+Here, the first layer of the tree are nodes 1 \& 2.
+Nodes 3 to 5 are the second layer children of node 1.
+Nodes 6 to 8 are the second layer children of node 2.
+Nodes 9 through 11 are the third layer children of node 3.
+And so forth for the remainder of the nodes shown.
+
+\subsection{Depth First Search}
+The order of nodes evaluated is shown in \Cref{app:evidence-dfs}.
+With these set of nodes, the movement of the agent is fluid from state to state.
+Therefore, it can be concluded that the implementation of DFS is working correctly.
+
+\subsection{Iterative Deepening Search}
+
+
+\subsection{A* Heuristic Search}
+
 
 \section{Scalability}
 
@@ -55,6 +156,52 @@ My code is nowhere near ``good'' or optimised (in terms of real time running, no
 
 \section{References}
 
-\section{Code}
 
+%%
+%% SECTION: Code
+%%
+\newpage
+\section{Code}
+\subsection{Breadth First Search}
+\lstinputlisting[style=default, language=java]{snippets/BFS.java}
+
+\newpage
+\subsection{Depth First Search}
+\lstinputlisting[style=default, language=java]{snippets/DFS.java}
+
+\newpage
+\subsection{Iterative Deepening Search}
+\lstinputlisting[style=default, language=java]{snippets/IDS.java}
+
+\newpage
+\subsection{A* Heuristic Search}
+\lstinputlisting[style=default, language=java]{snippets/AStar.java}
+
+%%
+%% APPENDICES
+%%
+\newpage
+\begin{appendices}
+  \crefalias{section}{appsec}
+  \crefalias{subsection}{appsec}
+
+  \section{Output Evidence}
+  \subsection{Breadth First Search}
+  \label{app:evidence-bfs}
+  \lstinputlisting[style=none]{snippets/evidence-BFS.txt}
+
+  \subsection{Depth First Search}
+  \label{app:evidence-dfs}
+  \lstinputlisting[style=none]{snippets/evidence-DFS.txt}
+
+  \subsection{Iterative Deepening Search}
+  \label{app:evidence-ids}
+  \lstinputlisting[style=none]{snippets/evidence-IDS.txt}
+
+  \subsection{A* Heuristic Search}
+  \label{app:evidence-a*}
+  \lstinputlisting[style=none]{snippets/evidence-A*.txt}
+
+  \section{Example Output}
+\end{appendices}
 \end{document}

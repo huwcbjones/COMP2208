@@ -42,7 +42,7 @@ public class AStar extends Search {
                     );
                     numberOfNodes++;
                     newNode.setPriority(
-                            calculatePriority(newNode.getGrid())
+                            calculatePriority(newNode)
                     );
                     if (this.checkExitCondition(newNode.getGrid())) {
                         completed(newNode);
@@ -61,7 +61,15 @@ public class AStar extends Search {
         currentNode = nodeQueue.poll();
     }
 
-    private int calculatePriority(Grid grid) {
+    private int calculatePriority(Node node) {
+        int score = 0;
+        score += getManhattenDistance(node.getGrid());
+        score += getTilesInCorrectPlace(node.getGrid());
+        score += node.getDepth();
+        return score;
+    }
+
+    private int getManhattenDistance(Grid grid){
         int score = 0;
         ArrayList<Block> blocks = grid.getBlocks();
         for(Block block: blocks){
@@ -69,6 +77,20 @@ public class AStar extends Search {
                 Position difference = this.exitGrid.getBlock(block.getID()).getPosition().subtract(block.getPosition());
                 score += Math.abs(difference.getX());
                 score += Math.abs(difference.getY());
+            } catch (NoSuchElementException ex) {
+
+            }
+        }
+        return score;
+    }
+
+    private int getTilesInCorrectPlace(Grid grid){
+        ArrayList<Block> blocks = grid.getBlocks();
+        int score = exitGrid.getBlocks().size();
+        for(Block block: blocks){
+            try {
+                if(this.exitGrid.getBlock(block.getID()).getPosition().equals(block.getPosition()))
+                    score--;
             } catch (NoSuchElementException ex) {
 
             }

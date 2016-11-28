@@ -1,0 +1,145 @@
+Running Search::preRun
+Running Search::runSearch
+Expanded Nodes:            0		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:           38		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:          170		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:          427		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:          741		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:          972		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        1,449		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        2,042		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        2,403		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        2,627		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        3,200		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        3,759		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        4,309		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        4,706		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        5,089		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        5,480		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        5,833		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        6,215		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        6,609		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        7,013		Elapsed Time [00:00]		Used Memory:
+Expanded Nodes:        7,438		Elapsed Time [00:01]		Used Memory:     93MB
+Expanded Nodes:        7,548		Elapsed Time [00:01]		Used Memory:
+Expanded Nodes:        8,169		Elapsed Time [00:01]		Used Memory:
+Expanded Nodes:        8,785		Elapsed Time [00:01]		Used Memory:
+Expanded Nodes:        8,997		Elapsed Time [00:01]		Used Memory:
+
+================================
+Solution found.
+Solution as follows:
+
+0:
+----
+----
+----
+abc*
+
+1:
+----
+----
+---*
+abc-
+
+2:
+----
+----
+--*-
+abc-
+
+3:
+----
+----
+-*--
+abc-
+
+4:
+----
+----
+-b--
+a*c-
+
+5:
+----
+----
+-b--
+*ac-
+
+6:
+----
+----
+*b--
+-ac-
+
+7:
+----
+----
+b*--
+-ac-
+
+8:
+----
+----
+ba--
+-*c-
+
+9:
+----
+----
+ba--
+-c*-
+
+10:
+----
+----
+ba*-
+-c--
+
+11:
+----
+--*-
+ba--
+-c--
+
+12:
+----
+-*--
+ba--
+-c--
+
+13:
+----
+-a--
+b*--
+-c--
+
+14:
+----
+-a--
+*b--
+-c--
+
+================================
+Start State:
+
+----
+----
+----
+abc*
+
+================================
+Exit State:
+
+----
+-a--
+-b--
+-c--
+
+================================
+Random Seed:
+7965083047300516107
+================================
+Nodes Expanded:
+9,491
+================================

@@ -1,0 +1,149 @@
+Running Search::preRun
+Running Search::runSearch
+
+Depth increased: 1
+
+Depth increased: 2
+
+Depth increased: 3
+
+Depth increased: 4
+
+Depth increased: 5
+Expanded Nodes:          189		Elapsed Time [00:00]		Used Memory:
+Depth increased: 6
+Expanded Nodes:          870		Elapsed Time [00:00]		Used Memory:
+Depth increased: 7
+Expanded Nodes:        4,122		Elapsed Time [00:00]		Used Memory:
+Depth increased: 8
+Expanded Nodes:       15,569		Elapsed Time [00:00]		Used Memory:
+Depth increased: 9
+Expanded Nodes:       44,117		Elapsed Time [00:01]		Used Memory:     87MBExpanded Nodes:       50,960		Elapsed Time [00:01]		Used Memory:
+Depth increased: 10
+Expanded Nodes:      162,212		Elapsed Time [00:02]		Used Memory:    140MB
+Depth increased: 11
+Expanded Nodes:      302,767		Elapsed Time [00:03]		Used Memory:    143MBExpanded Nodes:      465,493		Elapsed Time [00:04]		Used Memory:     32MBExpanded Nodes:      546,841		Elapsed Time [00:04]		Used Memory:
+Depth increased: 12
+Expanded Nodes:      649,869		Elapsed Time [00:05]		Used Memory:      4MBExpanded Nodes:      835,458		Elapsed Time [00:06]		Used Memory:    138MBExpanded Nodes:    1,018,926		Elapsed Time [00:07]		Used Memory:    104MBExpanded Nodes:    1,167,648		Elapsed Time [00:08]		Used Memory:    116MBExpanded Nodes:    1,342,004		Elapsed Time [00:09]		Used Memory:     57MBExpanded Nodes:    1,524,357		Elapsed Time [00:10]		Used Memory:     25MBExpanded Nodes:    1,699,719		Elapsed Time [00:11]		Used Memory:    121MBExpanded Nodes:    1,787,821		Elapsed Time [00:11]		Used Memory:
+Depth increased: 13
+Expanded Nodes:    1,824,296		Elapsed Time [00:12]		Used Memory:     71MBExpanded Nodes:    1,966,793		Elapsed Time [00:13]		Used Memory:     50MBExpanded Nodes:    2,162,291		Elapsed Time [00:14]		Used Memory:     57MBExpanded Nodes:    2,348,533		Elapsed Time [00:15]		Used Memory:     37MBExpanded Nodes:    2,540,465		Elapsed Time [00:16]		Used Memory:     34MBExpanded Nodes:    2,732,738		Elapsed Time [00:17]		Used Memory:     31MBExpanded Nodes:    2,920,399		Elapsed Time [00:18]		Used Memory:     16MBExpanded Nodes:    3,103,913		Elapsed Time [00:19]		Used Memory:    137MBExpanded Nodes:    3,295,237		Elapsed Time [00:20]		Used Memory:    131MBExpanded Nodes:    3,489,259		Elapsed Time [00:21]		Used Memory:    135MBExpanded Nodes:    3,667,882		Elapsed Time [00:22]		Used Memory:     89MBExpanded Nodes:    3,835,332		Elapsed Time [00:23]		Used Memory:     10MBExpanded Nodes:    4,022,254		Elapsed Time [00:24]		Used Memory:    141MBExpanded Nodes:    4,214,688		Elapsed Time [00:25]		Used Memory:    141MBExpanded Nodes:    4,403,704		Elapsed Time [00:26]		Used Memory:    127MBExpanded Nodes:    4,595,737		Elapsed Time [00:27]		Used Memory:    124MBExpanded Nodes:    4,787,754		Elapsed Time [00:28]		Used Memory:    122MBExpanded Nodes:    4,969,529		Elapsed Time [00:29]		Used Memory:     85MBExpanded Nodes:    5,147,124		Elapsed Time [00:30]		Used Memory:     44MBExpanded Nodes:    5,341,106		Elapsed Time [00:31]		Used Memory:     40MBExpanded Nodes:    5,515,405		Elapsed Time [00:32]		Used Memory:    133MBExpanded Nodes:    5,676,501		Elapsed Time [00:33]		Used Memory:     40MBExpanded Nodes:    5,777,296		Elapsed Time [00:33]		Used Memory:
+Depth increased: 14
+Expanded Nodes:    5,853,237		Elapsed Time [00:34]		Used Memory:    133MBExpanded Nodes:    6,045,152		Elapsed Time [00:35]		Used Memory:    129MBExpanded Nodes:    6,228,239		Elapsed Time [00:36]		Used Memory:     99MBExpanded Nodes:    6,396,529		Elapsed Time [00:37]		Used Memory:     24MB================================
+Solution found.
+Solution as follows:
+
+0:
+----
+----
+----
+abc*
+
+1:
+----
+----
+---*
+abc-
+
+2:
+----
+----
+--*-
+abc-
+
+3:
+----
+----
+-*--
+abc-
+
+4:
+----
+----
+-b--
+a*c-
+
+5:
+----
+----
+-b--
+*ac-
+
+6:
+----
+----
+*b--
+-ac-
+
+7:
+----
+----
+b*--
+-ac-
+
+8:
+----
+----
+ba--
+-*c-
+
+9:
+----
+----
+ba--
+-c*-
+
+10:
+----
+----
+ba*-
+-c--
+
+11:
+----
+--*-
+ba--
+-c--
+
+12:
+----
+-*--
+ba--
+-c--
+
+13:
+----
+-a--
+b*--
+-c--
+
+14:
+----
+-a--
+*b--
+-c--
+
+================================
+Start State:
+
+----
+----
+----
+abc*
+
+================================
+Exit State:
+
+----
+-a--
+-b--
+-c--
+
+================================
+Random Seed:
+-2736763515611179222
+================================
+Nodes Expanded:
+6430966
+================================
+Max Iterative Depth:
+14

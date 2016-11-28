@@ -1,0 +1,119 @@
+Running Search::preRun
+Running Search::runSearch
+Expanded Nodes:       29,378		Elapsed Time [00:01]		Used Memory:     58MBExpanded Nodes:       71,154		Elapsed Time [00:02]		Used Memory:     77MBExpanded Nodes:      124,017		Elapsed Time [00:03]		Used Memory:    130MBExpanded Nodes:      166,634		Elapsed Time [00:04]		Used Memory:    120MBExpanded Nodes:      236,683		Elapsed Time [00:05]		Used Memory:    167MBExpanded Nodes:      288,347		Elapsed Time [00:06]		Used Memory:    331MBExpanded Nodes:      336,500		Elapsed Time [00:07]		Used Memory:    286MBExpanded Nodes:      398,896		Elapsed Time [00:08]		Used Memory:    282MBExpanded Nodes:      458,833		Elapsed Time [00:09]		Used Memory:    462MBExpanded Nodes:      496,093		Elapsed Time [00:10]		Used Memory:    355MBExpanded Nodes:      574,817		Elapsed Time [00:11]		Used Memory:    603MBExpanded Nodes:      625,648		Elapsed Time [00:12]		Used Memory:    528MBExpanded Nodes:      687,264		Elapsed Time [00:13]		Used Memory:    479MBExpanded Nodes:      765,974		Elapsed Time [00:14]		Used Memory:    724MBExpanded Nodes:      819,442		Elapsed Time [00:15]		Used Memory:    644MBExpanded Nodes:      909,066		Elapsed Time [00:16]		Used Memory:    670MBExpanded Nodes:      998,278		Elapsed Time [00:17]		Used Memory:    692MBExpanded Nodes:    1,105,581		Elapsed Time [00:18]		Used Memory:    765MBExpanded Nodes:    1,179,148		Elapsed Time [00:19]		Used Memory:    981MBExpanded Nodes:    1,295,061		Elapsed Time [00:20]		Used Memory:  1,079MBExpanded Nodes:    1,370,995		Elapsed Time [00:21]		Used Memory:  1,054MBExpanded Nodes:    1,440,684		Elapsed Time [00:22]		Used Memory:  1,011MBExpanded Nodes:    1,547,352		Elapsed Time [00:23]		Used Memory:  1,074MBExpanded Nodes:    1,654,448		Elapsed Time [00:24]		Used Memory:  1,138MBExpanded Nodes:    1,765,672		Elapsed Time [00:25]		Used Memory:  1,213MBExpanded Nodes:    1,856,803		Elapsed Time [00:26]		Used Memory:  1,492MBExpanded Nodes:    1,930,003		Elapsed Time [00:27]		Used Memory:  1,444MBExpanded Nodes:    2,012,078		Elapsed Time [00:28]		Used Memory:  1,435MBExpanded Nodes:    2,100,007		Elapsed Time [00:29]		Used Memory:  1,444MBExpanded Nodes:    2,212,357		Elapsed Time [00:30]		Used Memory:  1,520MBExpanded Nodes:    2,325,635		Elapsed Time [00:31]		Used Memory:  1,596MBExpanded Nodes:    2,438,910		Elapsed Time [00:32]		Used Memory:  1,673MBExpanded Nodes:    2,549,779		Elapsed Time [00:33]		Used Memory:  1,749MBExpanded Nodes:    2,664,120		Elapsed Time [00:34]		Used Memory:  1,826MBExpanded Nodes:    2,766,546		Elapsed Time [00:35]		Used Memory:  2,153MBExpanded Nodes:    2,849,977		Elapsed Time [00:36]		Used Memory:  2,130MBExpanded Nodes:    2,970,872		Elapsed Time [00:37]		Used Memory:  2,230MBExpanded Nodes:    3,075,584		Elapsed Time [00:38]		Used Memory:  2,283MBExpanded Nodes:    3,178,468		Elapsed Time [00:39]		Used Memory:  2,328MBExpanded Nodes:    3,262,110		Elapsed Time [00:40]		Used Memory:  2,314MBExpanded Nodes:    3,349,678		Elapsed Time [00:41]		Used Memory:  2,313MBExpanded Nodes:    3,450,024		Elapsed Time [00:42]		Used Memory:  2,362MBExpanded Nodes:    3,564,528		Elapsed Time [00:43]		Used Memory:  2,439MBExpanded Nodes:    3,669,360		Elapsed Time [00:44]		Used Memory:  2,772MBExpanded Nodes:    3,775,457		Elapsed Time [00:45]		Used Memory:  2,822MBExpanded Nodes:    3,843,688		Elapsed Time [00:46]		Used Memory:  2,761MBExpanded Nodes:    3,949,632		Elapsed Time [00:47]		Used Memory:  2,812MBExpanded Nodes:    4,040,206		Elapsed Time [00:48]		Used Memory:  2,821MBExpanded Nodes:    4,127,753		Elapsed Time [00:49]		Used Memory:  2,821MBExpanded Nodes:    4,239,930		Elapsed Time [00:50]		Used Memory:  2,897MBExpanded Nodes:    4,352,605		Elapsed Time [00:51]		Used Memory:  2,973MBExpanded Nodes:    4,464,891		Elapsed Time [00:52]		Used Memory:  3,049MBExpanded Nodes:    4,564,968		Elapsed Time [00:53]		Used Memory:  3,363MBExpanded Nodes:    4,651,719		Elapsed Time [00:54]		Used Memory:  3,356MBExpanded Nodes:    4,747,240		Elapsed Time [00:55]		Used Memory:  3,380MBExpanded Nodes:    4,842,474		Elapsed Time [00:56]		Used Memory:  3,407MBExpanded Nodes:    4,941,967		Elapsed Time [00:57]		Used Memory:  3,438MBExpanded Nodes:    5,027,298		Elapsed Time [00:58]		Used Memory:  3,433MBExpanded Nodes:    5,140,339		Elapsed Time [00:59]		Used Memory:  3,509MBExpanded Nodes:    5,252,009		Elapsed Time [01:00]		Used Memory:  3,585MBExpanded Nodes:    5,364,664		Elapsed Time [01:01]		Used Memory:  3,661MBExpanded Nodes:    5,477,345		Elapsed Time [01:02]		Used Memory:  3,738MBExpanded Nodes:    5,568,689		Elapsed Time [01:03]		Used Memory:  4,025MBExpanded Nodes:    5,674,481		Elapsed Time [01:04]		Used Memory:  4,082MBExpanded Nodes:    5,744,161		Elapsed Time [01:08]		Used Memory:  4,027MBExpanded Nodes:    5,812,563		Elapsed Time [01:09]		Used Memory:  3,969MBExpanded Nodes:    5,905,378		Elapsed Time [01:10]		Used Memory:  4,260MBExpanded Nodes:    5,992,149		Elapsed Time [01:11]		Used Memory:  4,256MBExpanded Nodes:    6,067,506		Elapsed Time [01:12]		Used Memory:  4,214MBExpanded Nodes:    6,150,992		Elapsed Time [01:13]		Used Memory:  4,198MBExpanded Nodes:    6,263,272		Elapsed Time [01:14]		Used Memory:  4,275MBExpanded Nodes:    6,360,382		Elapsed Time [01:15]		Used Memory:  4,581MBExpanded Nodes:    6,405,473		Elapsed Time [01:16]		Used Memory:  4,444MBExpanded Nodes:    6,488,545		Elapsed Time [01:17]		Used Memory:  4,428MBExpanded Nodes:    6,600,002		Elapsed Time [01:18]		Used Memory:  4,505MBExpanded Nodes:    6,696,811		Elapsed Time [01:19]		Used Memory:  4,808MBExpanded Nodes:    6,758,005		Elapsed Time [01:20]		Used Memory:  4,724MBExpanded Nodes:    6,825,442		Elapsed Time [01:21]		Used Memory:  4,658MBExpanded Nodes:    6,939,339		Elapsed Time [01:22]		Used Memory:  4,734MBExpanded Nodes:    7,051,978		Elapsed Time [01:23]		Used Memory:  4,768MBExpanded Nodes:    7,163,761		Elapsed Time [01:24]		Used Memory:  4,844MBExpanded Nodes:    7,274,912		Elapsed Time [01:25]		Used Memory:  4,921MBExpanded Nodes:    7,313,015		Elapsed Time [01:31]		Used Memory:  5,039MBExpanded Nodes:    7,337,856		Elapsed Time [01:32]		Used Memory:  5,118MBExpanded Nodes:    7,454,059		Elapsed Time [01:33]		Used Memory:  5,201MBExpanded Nodes:    7,539,038		Elapsed Time [01:34]		Used Memory:  5,090MBExpanded Nodes:    7,637,113		Elapsed Time [01:35]		Used Memory:  5,106MBExpanded Nodes:    7,722,598		Elapsed Time [01:36]		Used Memory:  5,111MBExpanded Nodes:    7,833,920		Elapsed Time [01:37]		Used Memory:  5,187MBExpanded Nodes:    7,873,575		Elapsed Time [01:43]		Used Memory:  5,300MBExpanded Nodes:    7,951,934		Elapsed Time [01:44]		Used Memory:  5,264MBExpanded Nodes:    8,048,079		Elapsed Time [01:45]		Used Memory:  5,567MBExpanded Nodes:    8,137,070		Elapsed Time [01:46]		Used Memory:  5,526MBExpanded Nodes:    8,229,954		Elapsed Time [01:47]		Used Memory:  5,542MB================================
+Solution found.
+Solution as follows:
+
+0:
+----
+----
+----
+abc*
+
+1:
+----
+----
+---*
+abc-
+
+2:
+----
+----
+--*-
+abc-
+
+3:
+----
+----
+-*--
+abc-
+
+4:
+----
+----
+-b--
+a*c-
+
+5:
+----
+----
+-b--
+*ac-
+
+6:
+----
+----
+*b--
+-ac-
+
+7:
+----
+----
+b*--
+-ac-
+
+8:
+----
+----
+ba--
+-*c-
+
+9:
+----
+----
+ba--
+-c*-
+
+10:
+----
+----
+ba*-
+-c--
+
+11:
+----
+--*-
+ba--
+-c--
+
+12:
+----
+-*--
+ba--
+-c--
+
+13:
+----
+-a--
+b*--
+-c--
+
+14:
+----
+-a--
+*b--
+-c--
+
+================================
+Start State:
+
+----
+----
+----
+abc*
+
+================================
+Exit State:
+
+----
+-a--
+-b--
+-c--
+
+================================
+Random Seed:
+-2679893794501661041
+================================
+Nodes Expanded:
+8,318,621
+================================

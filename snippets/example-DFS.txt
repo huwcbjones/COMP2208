@@ -1,0 +1,121 @@
+Running Search::preRun
+Running Search::runSearch
+Expanded Nodes:            0		Elapsed Time [00:00]		Used Memory:Expanded Nodes:          114		Elapsed Time [00:00]		Used Memory:Expanded Nodes:          706		Elapsed Time [00:00]		Used Memory:Expanded Nodes:        1,969		Elapsed Time [00:00]		Used Memory:Expanded Nodes:        3,733		Elapsed Time [00:00]		Used Memory:Expanded Nodes:        5,414		Elapsed Time [00:00]		Used Memory:Expanded Nodes:        7,776		Elapsed Time [00:00]		Used Memory:
+
+================================
+Found solution.
+Solution as follows:
+
+0:
+----
+----
+----
+abc*
+
+1:
+----
+----
+----
+ab*c
+
+2:
+----
+----
+--*-
+ab-c
+
+3:
+----
+----
+---*
+ab-c
+
+4:
+----
+----
+---c
+ab-*
+
+5:
+----
+----
+---*
+ab-c
+
+6:
+----
+---*
+----
+ab-c
+
+7:
+----
+--*-
+----
+ab-c
+
+8:
+----
+-*--
+----
+ab-c
+
+9:
+-*--
+----
+----
+ab-c
+
+...
+...
+...
+
+6352:
+----
+----
+-a--
+b*c-
+
+6353:
+----
+----
+-a--
+*bc-
+
+6354:
+----
+----
+*a--
+-bc-
+
+6355:
+----
+*---
+-a--
+-bc-
+
+6356:
+----
+-*--
+-a--
+-bc-
+
+6357:
+----
+-a--
+-*--
+-bc-
+
+6358:
+----
+-a--
+-b--
+-*c-
+
+6359:
+----
+-a--
+-b--
+-c*-
+
+================================Start State:------------abc*================================Exit State:-----a---b---c--================================Random Seed:-7260170358428090793================================Nodes Expanded:7,896================================

@@ -1,16 +1,18 @@
 package blocksworld.search;
 
-import blocksworld.Grid;
 import blocksworld.GridController;
 import blocksworld.GridController.DIRECTION;
 import blocksworld.Node;
 import blocksworld.Pair;
 import blocksworld.exceptions.InvalidDirectionException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Stack;
 
 /**
- * {DESCRIPTION}
+ * Depth First Search
  *
  * @author Huw Jones
  * @since 27/10/2016
@@ -41,8 +43,8 @@ public class DFS extends Search {
                 try {
                     currentNode.setGrid(
                             GridController.move(
-                                currentNode.getParent().getGrid(),
-                                currentDirection
+                                    currentNode.getParent().getGrid(),
+                                    currentDirection
                             )
                     );
                     if (this.checkExitCondition(currentNode.getGrid())) {
@@ -57,7 +59,7 @@ public class DFS extends Search {
 
             Collections.shuffle(directions, this.random);
 
-            for(DIRECTION direction: directions){
+            for (DIRECTION direction : directions) {
                 nodeStack.push(new Pair<>(new Node(currentNode), direction));
             }
 

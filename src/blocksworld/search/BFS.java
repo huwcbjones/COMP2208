@@ -1,6 +1,5 @@
 package blocksworld.search;
 
-import blocksworld.Grid;
 import blocksworld.GridController;
 import blocksworld.GridController.DIRECTION;
 import blocksworld.Node;
@@ -11,7 +10,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * {DESCRIPTION}
+ * Breadth First Search
  *
  * @author Huw Jones
  * @since 21/10/2016
@@ -20,6 +19,9 @@ public class BFS extends Search {
 
     private Queue<Pair<Node, DIRECTION>> nodeQueue;
 
+    /**
+     * Set up the initial environment before running the search
+     */
     @Override
     protected void preRun() {
         this.nodeQueue = new ConcurrentLinkedQueue<>();
@@ -27,13 +29,14 @@ public class BFS extends Search {
         this.rootNode.setGrid(this.startGrid);
     }
 
+    /**
+     * Where the actual search runs
+     */
     @Override
     protected void runSearch() {
-
         this.currentNode = rootNode;
 
         while (true) {
-
             numberOfNodes++;
             if (currentDirection != null) {
                 try {

@@ -23,19 +23,18 @@ public abstract class Search {
     protected Random random;
     protected int numberOfNodes = 0;
     protected Grid exitGrid;
-    private boolean completed = false;
-    private long startTime;
-
     protected Node rootNode;
     protected Node currentNode;
     protected Pair<Node, GridController.DIRECTION> currentPair;
     protected GridController.DIRECTION currentDirection = null;
+    private boolean completed = false;
+    private long startTime;
 
     public Search() {
         this.randomSeed = new Random().nextLong();
         this.buildGrid();
         this.createExitGrid();
-        Runtime.getRuntime().addShutdownHook(new Thread(){
+        Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
                 System.out.print("\r\n\r\n");
@@ -67,7 +66,7 @@ public abstract class Search {
         }
     }
 
-    public void setSeed(long seed){
+    public void setSeed(long seed) {
         this.randomSeed = seed;
     }
 
@@ -94,7 +93,7 @@ public abstract class Search {
         }
     }
 
-    protected void completed(Node exitNode){
+    protected void completed(Node exitNode) {
         this.completed = true;
         System.out.println("\r\n\r\n================================");
         System.out.println("Solution found.");
@@ -116,16 +115,23 @@ public abstract class Search {
         System.out.println(this.numberOfNodes);
         System.out.println("================================");
     }
+
+    /**
+     * Set up the initial environment before running the search
+     */
     abstract protected void preRun();
 
+    /**
+     * Where the actual search runs
+     */
     abstract protected void runSearch() throws Exception;
 
     public String getSolution(Node endNode) {
         Stack<String> states = new Stack<>();
         Node currentNode = endNode;
         do {
-            if(currentNode != null) {
-                if(currentNode.getGrid() != null) {
+            if (currentNode != null) {
+                if (currentNode.getGrid() != null) {
                     states.add(currentNode.getGrid().toString());
                 }
             }
@@ -166,6 +172,8 @@ public abstract class Search {
         this.exitGrid = exitGrid;
     }
 
+    protected abstract void nextNode();
+
     private class Monitor implements Runnable {
         @Override
         public void run() {
@@ -184,7 +192,7 @@ public abstract class Search {
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
                 }
-                if(oldSeconds != seconds) {
+                if (oldSeconds != seconds) {
                     System.out.print(String.format("\rExpanded Nodes: %12s\t\tElapsed Time [%s:%s]\t\tUsed Memory: %6sMB\t",
                             NumberFormat.getNumberInstance(Locale.getDefault()).format(numberOfNodes),
                             String.format("%2d", minutes).replace(' ', '0'),
@@ -200,6 +208,4 @@ public abstract class Search {
             }
         }
     }
-
-    protected abstract void nextNode();
 }

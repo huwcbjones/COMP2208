@@ -23,6 +23,9 @@ public class IDS extends Search {
     private ArrayList<DIRECTION> directions;
     private int depth;
 
+    /**
+     * Set up the initial environment before running the search
+     */
     @Override
     protected void preRun() {
         this.nodeStack = new Stack<>();
@@ -36,14 +39,19 @@ public class IDS extends Search {
         currentDirection = null;
     }
 
+    /**
+     * Where the actual search runs
+     */
     @Override
     protected void runSearch() {
         while (true) {
-
+            // Check if we've hit the depth limit
             if (currentNode.getDepth() > depth) {
+                // If we have no more nodes in the stack, increase the depth
                 if(this.nodeStack.size() == 0) {
                     increaseDepth();
                 } else {
+                    // Otherwise continue processing the stack
                     nextNode();
                 }
                 continue;
@@ -53,12 +61,14 @@ public class IDS extends Search {
 
             if (currentDirection != null) {
                 try {
+                    // Process the move and store the new state in the node
                     currentNode.setGrid(
                             GridController.move(
                                     currentNode.getParent().getGrid(),
                                     currentDirection
                             )
                     );
+                    // Check if the grid meets the exit condition, if so, exit the search
                     if (this.checkExitCondition(currentNode.getGrid())) {
                         completed(currentNode);
                         break;
@@ -75,6 +85,7 @@ public class IDS extends Search {
 
             Collections.shuffle(directions, this.random);
 
+            // Push new directions on the stack to be processed
             for (DIRECTION direction : directions) {
                 nodeStack.push(new Pair<>(new Node(currentNode), direction));
             }
@@ -85,6 +96,9 @@ public class IDS extends Search {
         System.out.println(depth);
     }
 
+    /**
+     * Gets the next node off of the stack
+     */
     @Override
     protected void nextNode() {
         currentPair = nodeStack.pop();
@@ -92,9 +106,15 @@ public class IDS extends Search {
         currentDirection = currentPair.getValue();
     }
 
+    /**
+     * Increases the depth of the search
+     */
     private void increaseDepth(){
+        // Reset the search environment
         preRun();
+        // Increment depth
         depth++;
+        // Log new depth
         System.out.println("\r\nDepth increased: "+ depth);
     }
 }

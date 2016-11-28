@@ -145,12 +145,17 @@ With these set of nodes, the movement of the agent is fluid from state to state.
 Therefore, it can be concluded that the implementation of DFS is working correctly.
 
 \subsection{Iterative Deepening Search}
-
+My implementation of IDS logs when the maximum search depth increases.
+In the output log - as shown in \Cref{app:evidence-ids} - it can be seen that the nodes processed follow the expected order for IDS.
+When the depth is increased, it is evident that the search restarts again from the root node and proceeds to search down to the maximum depth.
 
 \subsection{A* Heuristic Search}
-
+With A* Heuristic Search, it is more difficult to prove that the algorithm is working correctly.
+\Cref{app:evidence-a*} shows the output log for A* Search.
+It is more difficult to see how my implementation of A* prioritises its node selection, however, I believe it to be working correctly.
 
 \section{Scalability}
+
 
 \section{Extras \& Limitations}
 

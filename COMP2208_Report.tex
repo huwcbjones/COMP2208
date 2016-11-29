@@ -2,7 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[margin=0.8in]{geometry}
-\usepackage[bookmarks]{hyperref}
+\usepackage{hyperref,bookmark}
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{color}
@@ -14,7 +14,7 @@
 \usepackage[inline]{enumitem}
 \usepackage{listings}
 \usepackage{color}
-\usepackage[toc,page]{appendix}
+\usepackage[page]{appendix}
 \usepackage{cleveref}
 
 \crefname{appsec}{Appendix}{Appendices}
@@ -94,6 +94,9 @@ In order to analyse the differences in scalability, I decided to build a framewo
 At the moment, I am most familiar with Java, therefore that is the language I chose to build my solution in.
 My code is nowhere near ``good'' or optimised (in terms of real time running, not nodes expanded), but it works.
 
+I decided to implement a monitoring thread to print out the current search status.
+This means that the number of nodes evaluated, how long the search has been running (in real time), and the amount of memory currently in use.
+
 \subsection{The Setup}
 I tried to keep data structures simple and minimalistic.
 The state of the puzzle is stored in a \node.
@@ -122,6 +125,29 @@ In addition, I allowed the input of the random number seed.
 This helped during debugging my program.
 If a DFS search didn't work with one random number, I could provide the random number and debug that case.
 
+\subsection{Organisation}
+My code was organised as following.
+All my code is available in \Cref{app:code}
+\begin{lstlisting}
+|-- BlocksWorld.java
+\-- blocksworld
+    |-- Block.java
+    |-- Grid.java
+    |-- GridController.java
+    |-- Node.java
+    |-- Pair.java
+    |-- Position.java
+    |-- exceptions
+    |   |-- InvalidBlockIDException.java
+    |   |-- InvalidDirectionException.java
+    |   \-- InvalidPositionException.java
+    \-- search
+        |-- AStar.java
+        |-- BFS.java
+        |-- DFS.java
+        |-- IDS.java
+        \-- Search.java
+\end{lstlisting}
 %%
 %% SECTION: Evidence
 %%
@@ -129,6 +155,9 @@ If a DFS search didn't work with one random number, I could provide the random n
 A {\grid} state is represented in a grid of dimensions $H \times W$.
 The agent is represented by a `\texttt{*}', blanks are represented by `\texttt{-}', and blocks are represented by a lowercase letter.
 In the evidence provided, the number above a {\grid} state is the node number.
+
+When a search is running, the current status of the search is displayed.
+This include the number of nodes evaluated (time complexity), the length of real time the search has been running, and the amount of used memory (space complexity).
 
 \subsection{Breadth First Search}
 \Cref{app:evidence-bfs} shows the order that the program evaluated nodes.
@@ -139,74 +168,183 @@ Nodes 6 to 8 are the second layer children of node 2.
 Nodes 9 through 11 are the third layer children of node 3.
 And so forth for the remainder of the nodes shown.
 
+Example output from a BFS search running is shown in \Cref{app:example-bfs}.
+Here, you can see the memory usage, my implementation of BFS fits the expected space complexity.
+Since the
+
 \subsection{Depth First Search}
 The order of nodes evaluated is shown in \Cref{app:evidence-dfs}.
 With these set of nodes, the movement of the agent is fluid from state to state.
 Therefore, it can be concluded that the implementation of DFS is working correctly.
+
+\Cref{app:example-dfs} shows the trace of a DFS running.
+It shows how few nodes were evaluated (in comparison to BFS), but then the solution is inherently long (compared to the optimal solution).
+I think this conclusively proves that my implementation of DFS is working correctly.
 
 \subsection{Iterative Deepening Search}
 My implementation of IDS logs when the maximum search depth increases.
 In the output log - as shown in \Cref{app:evidence-ids} - it can be seen that the nodes processed follow the expected order for IDS.
 When the depth is increased, it is evident that the search restarts again from the root node and proceeds to search down to the maximum depth.
 
+In addition, the memory usage (space complexity), as shown in the output in \Cref{app:example-ids}, seems to follow no trend.
+I believe this is due to the nodes on the fringe (at maximum depth) being removed as they aren't a solution.
+This would explain why the footprint of IDS stays so small when it is running.
+
 \subsection{A* Heuristic Search}
 With A* Heuristic Search, it is more difficult to prove that the algorithm is working correctly.
 \Cref{app:evidence-a*} shows the output log for A* Search.
 It is more difficult to see how my implementation of A* prioritises its node selection, however, I believe it to be working correctly.
+\Cref{app:example-a*} shows that very few nodes were evaluated (compared to other optimal searches such as BFS), and yet the optimal solution was found.
 
+%%
+%% SECTION: Scalability
+%%
 \section{Scalability}
+Thanks to my framework, it was trivial to control the complexity of puzzles to solve.
+I created a format for specifying start/exit states.
 
 
+
+%%
+%% SECTION: Extras & Limitations
+%%
 \section{Extras \& Limitations}
 
+%%
+%% SECTION: References
+%%
 \section{References}
-
-
-%%
-%% SECTION: Code
-%%
-\newpage
-\section{Code}
-\subsection{Breadth First Search}
-\lstinputlisting[style=default, language=java]{snippets/BFS.java}
-
-\newpage
-\subsection{Depth First Search}
-\lstinputlisting[style=default, language=java]{snippets/DFS.java}
-
-\newpage
-\subsection{Iterative Deepening Search}
-\lstinputlisting[style=default, language=java]{snippets/IDS.java}
-
-\newpage
-\subsection{A* Heuristic Search}
-\lstinputlisting[style=default, language=java]{snippets/AStar.java}
 
 %%
 %% APPENDICES
 %%
 \newpage
 \begin{appendices}
+  \bookmarksetupnext{level=-1}
+  \addappheadtotoc
   \crefalias{section}{appsec}
   \crefalias{subsection}{appsec}
 
+  %%
+  %% SECTION: Code
+  %%
+  \section{Code}
+  \label{app:code}
+  \subsection{BlocksWorld.java}
+  \label{app:code-BlocksWorld}
+  \lstinputlisting[style=default, language=java]{src/BlocksWorld.java}
+
+  \newpage
+  \subsection{Grid.java}
+  \label{app:code-Grid}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/Grid.java}
+
+  \newpage
+  \subsection{GridController.java}
+  \label{app:code-GridController}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/GridController.java}
+
+  \newpage
+  \subsection{Node.java}
+  \label{app:code-Node}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/Node.java}
+
+  \newpage
+  \subsection{Pair.java}
+  \label{app:code-Pair}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/Pair.java}
+
+  \newpage
+  \subsection{Position.java}
+  \label{app:code-Position}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/Position.java}
+
+  \newpage
+  \subsection{InvalidBlockIDException.java}
+  \label{app:code-InvalidBlockIDException}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/exceptions/InvalidBlockIDException.java}
+
+  \newpage
+  \subsection{InvalidDirectionException.java}
+  \label{app:code-InvalidDirectionException}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/exceptions/InvalidDirectionException.java}
+
+  \newpage
+  \subsection{InvalidPositionException.java}
+  \label{app:code-InvalidPositionException}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/exceptions/InvalidPositionException.java}
+
+  \newpage
+  \subsection{AStar.java}
+  \label{app:code-AStar}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/search/AStar.java}
+
+  \newpage
+  \subsection{BFS.java}
+  \label{app:code-BFS}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/search/BFS.java}
+
+  \newpage
+  \subsection{DFS.java}
+  \label{app:code-DFS}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/search/DFS.java}
+
+  \newpage
+  \subsection{IDS.java}
+  \label{app:code-IDS}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/search/IDS.java}
+
+  \newpage
+  \subsection{Search.java}
+  \label{app:code-Search}
+  \lstinputlisting[style=default, language=java]{src/blocksworld/search/Search.java}
+
+  %%
+  %% SECTION: Output Evidence
+  %%
+  \newpage
   \section{Output Evidence}
   \subsection{Breadth First Search}
   \label{app:evidence-bfs}
   \lstinputlisting[style=none]{snippets/evidence-BFS.txt}
 
+  %\newpage
   \subsection{Depth First Search}
   \label{app:evidence-dfs}
   \lstinputlisting[style=none]{snippets/evidence-DFS.txt}
 
+  \newpage
   \subsection{Iterative Deepening Search}
   \label{app:evidence-ids}
   \lstinputlisting[style=none]{snippets/evidence-IDS.txt}
 
+  %\newpage
   \subsection{A* Heuristic Search}
   \label{app:evidence-a*}
   \lstinputlisting[style=none]{snippets/evidence-A*.txt}
 
+  %%
+  %% SECTION: Example Output
+  %%
+  \newpage
   \section{Example Output}
+  \subsection{Breadth First Search}
+  \label{app:example-bfs}
+  \lstinputlisting[style=none]{snippets/example-BFS.txt}
+
+  \newpage
+  \subsection{Depth First Search}
+  \label{app:example-dfs}
+  \lstinputlisting[style=none]{snippets/example-DFS.txt}
+
+  \newpage
+  \subsection{Iterative Deepening Search}
+  \label{app:example-ids}
+  \lstinputlisting[style=none]{snippets/example-IDS.txt}
+
+  \newpage
+  \subsection{A* Heuristic Search}
+  \label{app:example-a*}
+  \lstinputlisting[style=none]{snippets/example-A*.txt}
 \end{appendices}
 \end{document}

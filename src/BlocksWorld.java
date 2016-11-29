@@ -30,6 +30,8 @@ public class BlocksWorld {
 
             int width = -1;
             int height = -1;
+            int refresh = -1;
+
             Long seed = null;
             if (argList.contains("--height") || argList.contains("-h")) {
                 int index = (argList.contains("-h")) ? argList.indexOf("-h") : argList.indexOf("--height");
@@ -38,6 +40,11 @@ public class BlocksWorld {
             if (argList.contains("--width") || argList.contains("-w")) {
                 int index = (argList.contains("-w")) ? argList.indexOf("-w") : argList.indexOf("--width");
                 width = getInt(argList, index);
+            }
+
+            if (argList.contains("--interval") || argList.contains("-i")) {
+                int index = (argList.contains("-i")) ? argList.indexOf("-i") : argList.indexOf("--interval");
+                refresh = getInt(argList, index);
             }
 
             if (width == -1 || height == -1) {
@@ -70,7 +77,7 @@ public class BlocksWorld {
                     exitGrid = parseState(argList.get(exitIndex + 1), width, height);
                 }
 
-                search(type, startGrid, exitGrid, seed);
+                search(type, startGrid, exitGrid, seed, refresh);
             } catch (ArrayIndexOutOfBoundsException e) {
                 System.out.println("No option was specified for " + argList.get(index));
             }
@@ -98,12 +105,13 @@ public class BlocksWorld {
         BlocksWorld.header();
         System.out.println("Arguments:");
         System.out.println("  -e, --exit [STATE]\tSpecifies exit state.");
-        System.out.println("  -h, --height\t\tSets the grid height.");
+        System.out.println("  -h, --height [HEIGHT]\tSets the grid height.");
         System.out.println("       --help\t\tPrints this help message.");
+        System.out.println("  -i, --interval [TIME]\tSets the refresh interval (in ms) - for monitoring search status.");
         System.out.println("  -r, --ran [STATE]\tSpecifies the seed used for the pseudo-random number.");
         System.out.println("  -s, --start [STATE]\tSpecifies the start state");
-        System.out.println("  -t, --type\t\tSpecifies the search type:\r\n\t\t\tBFS - Breadth First Search\r\n\t\t\tDFS - Depth First Search\r\n\t\t\tIDS - Iterative Deepening Search\r\n\t\t\tA* - A* Heuristic Search");
-        System.out.println("  -w, --width\t\tSets the grid width.");
+        System.out.println("  -t, --type [TYPE]\tSpecifies the search type:\r\n\t\t\tBFS - Breadth First Search\r\n\t\t\tDFS - Depth First Search\r\n\t\t\tIDS - Iterative Deepening Search\r\n\t\t\tA* - A* Heuristic Search");
+        System.out.println("  -w, --width [WIDTH]\tSets the grid width.");
     }
 
     private static int getInt(List<String> args, int argIndex) throws ParseException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
@@ -152,7 +160,7 @@ public class BlocksWorld {
         }
     }
 
-    private static void search(String type, Grid startState, Grid exitState, Long seed) {
+    private static void search(String type, Grid startState, Grid exitState, Long seed, int refreshTime) {
         Search search = null;
         switch (type) {
             case "BFS":
@@ -181,6 +189,9 @@ public class BlocksWorld {
         }
         if(seed != null){
             search.setSeed(seed);
+        }
+        if(refreshTime != -1L){
+            search.setRefreshTime(refreshTime);
         }
         search.run();
     }

@@ -11,7 +11,7 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
- * {DESCRIPTION}
+ * Abstract Search Class
  *
  * @author Huw Jones
  * @since 11/10/2016
@@ -21,7 +21,7 @@ public abstract class Search {
     protected Grid startGrid;
     protected long randomSeed;
     protected Random random;
-    protected int numberOfNodes = 0;
+    protected long numberOfNodes = 0;
     protected Grid exitGrid;
     protected Node rootNode;
     protected Node currentNode;
@@ -29,6 +29,7 @@ public abstract class Search {
     protected GridController.DIRECTION currentDirection = null;
     private boolean completed = false;
     private long startTime;
+    private int refreshTime = 100;
 
     public Search() {
         this.randomSeed = new Random().nextLong();
@@ -84,8 +85,8 @@ public abstract class Search {
         try {
             Thread t = new Thread(new Monitor(), "MonitorThread");
             t.setDaemon(true);
-            t.start();
             this.startTime = System.nanoTime();
+            t.start();
             this.runSearch();
         } catch (Exception ex) {
             System.out.println("Error running search.");
@@ -164,6 +165,14 @@ public abstract class Search {
         return exitReached;
     }
 
+    public int getRefreshTime() {
+        return refreshTime;
+    }
+
+    public void setRefreshTime(int time) {
+        this.refreshTime = time;
+    }
+
     public void setStartState(Grid startGrid) {
         this.startGrid = startGrid;
     }
@@ -179,7 +188,6 @@ public abstract class Search {
         public void run() {
             long time;
             long minutes;
-            long oldSeconds = 0;
             long seconds;
             long memory;
             while (!completed) {
@@ -188,23 +196,15 @@ public abstract class Search {
                 seconds = time / 1000000000;
                 minutes = seconds / 60;
                 seconds -= minutes * 60;
+                System.out.print(String.format("\rExpanded Nodes: %12s\t\tElapsed Time [%s:%s]\t\tUsed Memory: %6sMB",
+                        NumberFormat.getNumberInstance(Locale.getDefault()).format(numberOfNodes),
+                        String.format("%2d", minutes).replace(' ', '0'),
+                        String.format("%2d", seconds).replace(' ', '0'),
+                        NumberFormat.getNumberInstance(Locale.getDefault()).format(memory)));
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(Search.this.getRefreshTime());
                 } catch (InterruptedException e) {
                 }
-                if (oldSeconds != seconds) {
-                    System.out.print(String.format("\rExpanded Nodes: %12s\t\tElapsed Time [%s:%s]\t\tUsed Memory: %6sMB\t",
-                            NumberFormat.getNumberInstance(Locale.getDefault()).format(numberOfNodes),
-                            String.format("%2d", minutes).replace(' ', '0'),
-                            String.format("%2d", seconds).replace(' ', '0'),
-                            NumberFormat.getNumberInstance(Locale.getDefault()).format(memory)));
-                } else {
-                    System.out.print(String.format("\rExpanded Nodes: %12s\t\tElapsed Time [%s:%s]\t\tUsed Memory: ",
-                            NumberFormat.getNumberInstance(Locale.getDefault()).format(numberOfNodes),
-                            String.format("%2d", minutes).replace(' ', '0'),
-                            String.format("%2d", seconds).replace(' ', '0')));
-                }
-                oldSeconds = seconds;
             }
         }
     }

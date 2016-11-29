@@ -1,6 +1,7 @@
 Running Search::preRun
 Running Search::runSearch
-Expanded Nodes:            0		Elapsed Time [00:00]		Used Memory:
+
+Expanded Nodes:            0		Elapsed Time [00:00]		Used Memory:
 Expanded Nodes:           38		Elapsed Time [00:00]		Used Memory:
 Expanded Nodes:          170		Elapsed Time [00:00]		Used Memory:
 Expanded Nodes:          427		Elapsed Time [00:00]		Used Memory:

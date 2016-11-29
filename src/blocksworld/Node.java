@@ -1,7 +1,8 @@
 package blocksworld;
 
 /**
- * Node of Moves
+ * Node
+ * Stores a grid state
  *
  * @author Huw Jones
  * @since 08/10/2016
@@ -19,6 +20,7 @@ public class Node {
 
     public Node(Node parent) {
         this.parent = parent;
+        // Cheap way to calculate depth of this node
         this.depth = parent.getDepth() + 1;
     }
 

@@ -43,6 +43,9 @@ public abstract class Search {
         });
     }
 
+    /**
+     * Builds the default 4x4 grid
+     */
     private void buildGrid() {
         startGrid = GridController.createGrid(4, 4);
         try {
@@ -55,6 +58,9 @@ public abstract class Search {
         }
     }
 
+    /**
+     * Builds the defualt exit grid state
+     */
     void createExitGrid() {
         this.exitGrid = GridController.createGrid(this.startGrid.getWidth(), this.startGrid.getHeight());
 
@@ -67,10 +73,17 @@ public abstract class Search {
         }
     }
 
+    /**
+     * Sets the random number seed
+     * @param seed Seed
+     */
     public void setSeed(long seed) {
         this.randomSeed = seed;
     }
 
+    /**
+     * Runs the search
+     */
     public void run() {
         System.out.println("Creating random seed...");
         this.random = new Random(this.randomSeed);
@@ -94,6 +107,11 @@ public abstract class Search {
         }
     }
 
+    /**
+     * Called when a search completes.
+     * It dumps the solution and stats to console
+     * @param exitNode Node that solves the puzzle
+     */
     protected void completed(Node exitNode) {
         this.completed = true;
         System.out.println("\r\n\r\n================================");
@@ -127,9 +145,18 @@ public abstract class Search {
      */
     abstract protected void runSearch() throws Exception;
 
+    /**
+     * Builds the solution from the exit node
+     * @param endNode End Node that is in the exit state
+     * @return String that is the solution
+     */
     public String getSolution(Node endNode) {
+        // Using a stack so we can reverse the order of the nodes easier
         Stack<String> states = new Stack<>();
         Node currentNode = endNode;
+
+        // Dump all nodes on the stack whilst the parent isn't null
+        // Only the root node has a null parent
         do {
             if (currentNode != null) {
                 if (currentNode.getGrid() != null) {
@@ -137,6 +164,8 @@ public abstract class Search {
                 }
             }
         } while ((currentNode = currentNode.getParent()) != null);
+
+        // Count moves whilst looping through the stack and append grid state to the sting
         StringBuilder builder = new StringBuilder();
         String currentString;
         int moves = 0;
@@ -152,11 +181,20 @@ public abstract class Search {
         return builder.toString();
     }
 
+    /**
+     * Checks whether or not a grid meets the exit criteria
+     * @param grid Grid to check
+     * @return true if the exit condition has been reached
+     */
     protected boolean checkExitCondition(Grid grid) {
+        // Lambda to get blocks (excluding the agent "*")
         List<Block> blocks = grid.getBlocks().stream().filter(b -> b.getID() != '*').collect(Collectors.toList());
 
+        // Assume we're complete
         boolean exitReached = true;
         Block comparisonBlock;
+
+        // Loop through the block and AND the matching block result
         for (Block block : blocks) {
             comparisonBlock = this.exitGrid.getBlock(block.getID());
             exitReached &= comparisonBlock.getPosition().equals(block.getPosition());
@@ -165,24 +203,46 @@ public abstract class Search {
         return exitReached;
     }
 
+    /**
+     * Gets the monitor thread interval refresh time
+     * @return Interval refresh time (in ms)
+     */
     public int getRefreshTime() {
         return refreshTime;
     }
 
+    /**
+     * Sets the refresh interval
+     * @param time time in ms
+     */
     public void setRefreshTime(int time) {
         this.refreshTime = time;
     }
 
+    /**
+     * Sets the start grid state
+     * @param startGrid Grid to start from
+     */
     public void setStartState(Grid startGrid) {
         this.startGrid = startGrid;
     }
 
+    /**
+     * Sets the exit grid state
+     * @param exitGrid Grid that forms the exit conditions
+     */
     public void setExitState(Grid exitGrid) {
         this.exitGrid = exitGrid;
     }
 
+    /**
+     * Gets the next node
+     */
     protected abstract void nextNode();
 
+    /**
+     * Monitor Thread (provides ongoing stats of the search in console)
+     */
     private class Monitor implements Runnable {
         @Override
         public void run() {

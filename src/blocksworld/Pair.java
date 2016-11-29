@@ -1,7 +1,7 @@
 package blocksworld;
 
 /**
- * {DESCRIPTION}
+ * Holds a Pair of Values
  *
  * @author Huw Jones
  * @since 08/10/2016

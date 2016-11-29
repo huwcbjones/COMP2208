@@ -1,7 +1,7 @@
 package blocksworld.exceptions;
 
 /**
- * {DESCRIPTION}
+ * Thrown if an invalid Block ID was specified
  *
  * @author Huw Jones
  * @since 08/10/2016

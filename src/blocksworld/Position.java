@@ -1,16 +1,14 @@
 package blocksworld;
 
-import blocksworld.Pair;
-
 /**
- * {DESCRIPTION}
+ * Effectively a Co-Ordinate in 2D space
  *
  * @author Huw Jones
  * @since 04/11/2016
  */
 public class Position extends Pair<Integer, Integer> {
-    public Position(int key, int value) {
-        super(key, value);
+    public Position(int x, int y) {
+        super(x, y);
     }
 
     public int getX(){

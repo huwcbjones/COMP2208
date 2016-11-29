@@ -3,7 +3,7 @@ package blocksworld.exceptions;
 import blocksworld.Position;
 
 /**
- * {DESCRIPTION}
+ * Thrown if an invalid position was specified
  *
  * @author Huw Jones
  * @since 08/10/2016

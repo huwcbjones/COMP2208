@@ -4,7 +4,7 @@ import blocksworld.GridController;
 import blocksworld.Pair;
 
 /**
- * {DESCRIPTION}
+ * Thrown if an invalid direction was given
  *
  * @author Huw Jones
  * @since 08/10/2016

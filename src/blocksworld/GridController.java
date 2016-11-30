@@ -1,5 +1,6 @@
 package blocksworld;
 
+import blocksworld.exceptions.InvalidBlockIDException;
 import blocksworld.exceptions.InvalidDirectionException;
 import blocksworld.exceptions.InvalidPositionException;
 
@@ -28,12 +29,12 @@ public class GridController {
         return grid;
     }
 
-    public static Grid placeAgent(Grid grid, int x, int y) throws InvalidPositionException {
+    public static Grid placeAgent(Grid grid, int x, int y) throws InvalidPositionException, InvalidBlockIDException {
         grid.placeAgent(x, y);
         return grid;
     }
 
-    public static Grid placeAgent(Grid grid, Position position) throws InvalidPositionException {
+    public static Grid placeAgent(Grid grid, Position position) throws InvalidPositionException, InvalidBlockIDException {
         grid.placeAgent(position);
         return grid;
     }

@@ -2,8 +2,10 @@ import blocksworld.Grid;
 import blocksworld.GridController;
 import blocksworld.Pair;
 import blocksworld.Position;
+import blocksworld.exceptions.InvalidBlockIDException;
 import blocksworld.exceptions.InvalidPositionException;
 import blocksworld.search.*;
+import org.omg.CORBA.DynAnyPackage.Invalid;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -147,7 +149,11 @@ public class BlocksWorld {
                         if (symbol >= 'a' && symbol <= 'z') {
                             g.placeBlock(symbol, new Position(x, i - 2));
                         } else if (symbol == '*') {
-                            g.placeAgent(x, i - 2);
+                            try {
+                                g.placeAgent(x, i - 2);
+                            } catch (InvalidBlockIDException ex){
+                                System.out.println("Multiple agents detected... skipping");
+                            }
                         }
                     } catch (InvalidPositionException e) {
                         e.printStackTrace();

@@ -1,6 +1,7 @@
 package blocksworld.search;
 
 import blocksworld.*;
+import blocksworld.exceptions.InvalidBlockIDException;
 import blocksworld.exceptions.InvalidPositionException;
 
 import java.text.NumberFormat;
@@ -53,7 +54,7 @@ public abstract class Search {
             GridController.placeBlock(startGrid, 'b', 1, 3);
             GridController.placeBlock(startGrid, 'c', 2, 3);
             GridController.placeAgent(startGrid, 3, 3);
-        } catch (InvalidPositionException e) {
+        } catch (InvalidPositionException | InvalidBlockIDException e) {
             e.printStackTrace();
         }
     }

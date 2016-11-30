@@ -1,5 +1,6 @@
 package blocksworld;
 
+import blocksworld.exceptions.InvalidBlockIDException;
 import blocksworld.exceptions.InvalidPositionException;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class Grid {
      * @param y y-coord
      * @throws InvalidPositionException Thrown if the given position is invalid
      */
-    public void placeAgent(int x, int y) throws InvalidPositionException {
+    public void placeAgent(int x, int y) throws InvalidPositionException, InvalidBlockIDException {
         placeAgent(new Position(x, y));
     }
 
@@ -69,7 +70,10 @@ public class Grid {
      * @param position Position P(x, y)
      * @throws InvalidPositionException Thrown if the given position is invalid
      */
-    public void placeAgent(Position position) throws InvalidPositionException {
+    public void placeAgent(Position position) throws InvalidPositionException, InvalidBlockIDException {
+        if(this.blocks.containsKey('*')){
+            throw new InvalidBlockIDException('*');
+        }
         this.placeBlock('*', position);
     }
 

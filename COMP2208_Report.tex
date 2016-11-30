@@ -338,7 +338,11 @@ I definitely could have investigated the effect that different sized grids had o
   but considering this report's purpose was to compare and contrast the effectiveness of different tree search algorithms, I figured this would have been a little too far out of the scope of the report.
 In addition, I don't think that non-square grids would have had any affect on my outcomes -- but that is a claim to be investigated more thoroughly in the future.
 
-
+\paragraph{Optimal Coding}
+I believe I was a bit overambitious whilst trying to investigate 5x5 grids.
+Even though A* and DFS could find the solution for a 5x5 with a difficulty of 21, both IDS and BFS could not solve puzzles with a difficulty greater than 15.
+I ran the tests on heavy duty servers (with enough resources) for about an hour or so, but each time the search approached using 26GB of RAM (yes, really, 26GB) it seemed to stall completely.
+I tried changing servers and tweaking JVM settings, but ultimately, I attribute this limitation to my unoptimised code.
 
 %%
 %% SECTION: References

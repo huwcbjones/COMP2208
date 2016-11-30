@@ -1,12 +1,18 @@
 #!/bin/bash
 fFlag=false;
 tFlag=false;
+nFlag=false;
 output=".";
-while getopts 't:f:o:' flag; do
+testNumber="";
+interval=100;
+
+while getopts 'i:n:t:f:o:' flag; do
   case "${flag}" in
+    i) interval="${OPTARG}" ;;
     o) output="${OPTARG}" ;;
     t) type="${OPTARG}" ; tFlag=true ;;
     f) file="${OPTARG}" ; fFlag=true ;;
+    n) testNumber="${OPTARG}" ; nFlag=true;;
     *) echo "Unexpected option ${flag}" ; exit ;
   esac
 done
@@ -23,6 +29,12 @@ then
   exit 1
 fi
 
+if ! $nFlag
+then
+  echo "Test number must be provided with -n!";
+  exit 1
+fi
+
 cat "$file" | awk '
 BEGIN{
   RS = "\n";
@@ -33,10 +45,12 @@ BEGIN{
   split($2, parts, ":");
   height=parts[2];
   width=parts[1];
-  if(NF == 2){
-    system("./run.sh -w \""width"\" -h \""height"\" -t \"'$type'\" -s \""$2"\" > "output);
-  } else {
-    system("./run.sh -w "width" -h "height" -t \"'$type'\" -s \""$2"\" -e \""$3"\" > "output);
+  if($1 == "" || $1 == "'$testNumber'") {
+    if(NF == 2){
+      system("./run.sh -i '$interval' -w \""width"\" -h \""height"\" -t \"'$type'\" -s \""$2"\" > "output);
+    } else {
+      system("./run.sh -i '$interval' -w "width" -h "height" -t \"'$type'\" -s \""$2"\" -e \""$3"\" > "output);
+    }
   }
 }
 '

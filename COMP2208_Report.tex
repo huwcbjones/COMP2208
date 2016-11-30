@@ -97,7 +97,7 @@ My code is nowhere near ``good'' or optimised (in terms of real time running, no
 I decided to implement a monitoring thread to print out the current search status.
 This means that the number of nodes evaluated, how long the search has been running (in real time), and the amount of memory currently in use.
 
-\subsection{The Setup}
+\subsection{The Setup}\label{sec:approach_setup}
 I tried to keep data structures simple and minimalistic.
 The state of the puzzle is stored in a \node.
 A {\node} has a {\grid} (which represents the state of the puzzle), a parent node reference, a depth (used for IDS), and a priority (used for A*).
@@ -107,16 +107,17 @@ A {\grid} has a width/height, a 2D array of characters (representing blocks), an
 I created a framework whereby the program parameters can be manipulated via the command line.
 \begin{lstlisting}
 -e, --exit [STATE]    Specifies exit state.
--h, --height          Sets the grid height.
+-h, --height [HEIGHT] Sets the grid height.
     --help            Prints this help message.
--r, --ran [LONG]      Specifies the seed used for the pseudo-random number.
+-i, --interval [TIME] Sets the refresh interval (in ms) - for monitoring search status.
+-r, --ran [STATE]     Specifies the seed used for the pseudo-random number.
 -s, --start [STATE]   Specifies the start state
--t, --type            Specifies the search type:
-                    		BFS - Breadth First Search
-                    		DFS - Depth First Search
-                    		IDS - Iterative Deepening Search
-                    		A* - A* Heuristic Search
--w, --width           Sets the grid width.
+-t, --type [TYPE]     Specifies the search type:
+                      BFS - Breadth First Search
+                      DFS - Depth First Search
+                      IDS - Iterative Deepening Search
+                      A* - A* Heuristic Search
+-w, --width [WIDTH]   Sets the grid width.
 \end{lstlisting}
 This framework allowed me to create scripts to automate my searching.
 It also allowed me to inject different start/finish grids, as well as injecting different grid sizes - all without having to rewrite any of my code.
@@ -125,29 +126,40 @@ In addition, I allowed the input of the random number seed.
 This helped during debugging my program.
 If a DFS search didn't work with one random number, I could provide the random number and debug that case.
 
-\subsection{Organisation}
+\subsection{The Organisation}\label{sec:approach_organisation}
 My code was organised as following.
-All my code is available in \Cref{app:code}
+All my code is available in \Cref{app:code}.
 \begin{lstlisting}
 |-- BlocksWorld.java
-\-- blocksworld
-    |-- Block.java
-    |-- Grid.java
-    |-- GridController.java
-    |-- Node.java
-    |-- Pair.java
-    |-- Position.java
-    |-- exceptions
-    |   |-- InvalidBlockIDException.java
-    |   |-- InvalidDirectionException.java
-    |   \-- InvalidPositionException.java
-    \-- search
-        |-- AStar.java
-        |-- BFS.java
-        |-- DFS.java
-        |-- IDS.java
-        \-- Search.java
+|-- blocksworld
+|   |-- Block.java
+|   |-- Grid.java
+|   |-- GridController.java
+|   |-- Node.java
+|   |-- Pair.java
+|   |-- Position.java
+|   |-- exceptions
+|   |   |-- InvalidBlockIDException.java
+|   |   |-- InvalidDirectionException.java
+|   |   \-- InvalidPositionException.java
+|   \-- search
+|       |-- AStar.java
+|       |-- BFS.java
+|       |-- DFS.java
+|       |-- IDS.java
+|       \-- Search.java
+|-- run.sh
+\-- test.sh
 \end{lstlisting}
+
+I chose to organise my code this way to make it easier for me to add features and group common features together.
+
+\subsection{The Scripts}\label{sec:approach_scripts}
+I created a couple of shell scripts to aid my data collection and semi-automate running puzzles.
+The most useful script, \texttt{test.sh} (see \Cref{app:code-test}), took a CSV file of puzzle states and executed a given search type on the entire set, then dumped the output to a file.
+It saved a long time of running lots of puzzles against all the searches.
+\texttt{run.sh} (see \Cref{app:code-run}) is effectively a script that aliases the running of my java program.
+
 %%
 %% SECTION: Evidence
 %%
@@ -199,10 +211,45 @@ It is more difficult to see how my implementation of A* prioritises its node sel
 %%
 %% SECTION: Scalability
 %%
+\newpage
 \section{Scalability}
-Thanks to my framework, it was trivial to control the complexity of puzzles to solve.
-I created a format for specifying start/exit states.
+I use the term \textbf{complexity} synonymously with difficulty in regards to searching throughout this report.
+In this report, the difficulty/complexity number is the length of the optimal solution for a problem.
 
+\paragraph{To investigate the scalability of all 4 searches, I decided to start with the given problem and work backwards.}
+The base (given) problem required a minimum of 14 moves to solve and since my searches printed out the list of states to complete the puzzle,
+I used this printout to form puzzles of different complexities.
+This is how I controlled the ``Problem Difficulty''.
+
+As mentioned in \Cref{sec:approach_scripts}, I wrote a script to automate running puzzles of different complexities.
+I used the output from the base puzzle to create a CSV of states to test.
+These states ranged from a complexity of 1, to 14 (the base problem).
+I ran this test script of all 4 of the search types.
+
+\paragraph{The graph in \Cref{app:graph_4x4} displays my findings.}
+It is important to note that I've used a logarithmic scale on the y axis to enhance the readability of the graph.
+
+The most striking element of this graph is how ``random'' the line for DFS is.
+This shows that the complexity of DFS is not directly linked to the difficulty of the puzzle.
+This is to be expected for DFS as there is no ``real'' logic to how it searches -- it tries random moves until it finds a solution.
+
+The lines for BFS/IDS seem to intertwine and have the same gradient.
+Having the same gradient shows that both search methods increase at roughly the same exponential rate (in regards to time complexity against problem difficulty).
+There are times where IDS time complexity is less than BFS complexity.
+This is most probably due to the location of the solution node.
+Since BFS searches left to right, top to bottom and IDS searches from top to bottom, left to right, if the solution is on the bottom left of the tree, IDS will find it before BFS.
+
+Finally, it's important to note how dramatic the difference between A* and BFS/IDS are in terms of time complexity.
+With A* the heuristics make all the difference between an efficient search and an inefficient search.
+In this investigation, my heuristic function is inadmissible as it is the sum of the Manhattan Distance, Depth of the Node, and the number of blocks in the incorrect position.
+With this heuristic function, the time complexity for A* increases exponentially with the problem difficulty, but not to the same extent as that of BFS/IDS.
+At a problem with difficulty of ``14'', A* had a time complexity 3 orders of magnitude smaller than BFS/IDS.
+
+\paragraph{Overall, this graph shows the striking difference in time complexities.}
+I can safely conclude that the best search method, of the 4 compared, is A* Heuristic Search.
+It is evident that using the heuristic function mentioned previously, A* search has a time complexity magnitudes smaller, than that of IDS/BFS.
+This effectively rules IDS/BFS out.
+DFS, although sometimes providing good time complexity for some random seeds, is ultimately a poor choice if you are wanting to find the optimal solution.
 
 
 %%
@@ -210,10 +257,73 @@ I created a format for specifying start/exit states.
 %%
 \section{Extras \& Limitations}
 
+\subsection{Extras}
+\subsubsection{Complexity vs Problem Size}
+I decided to go a little further whilst investigating the complexity for different problem sizes.
+I collected data for puzzles on different grid sizes.
+I used grids sized 2x2, 3x3 and 5x5.
+
+The graphs for these grids are available in \Cref{app:graph_2x2}, \Cref{app:graph_3x3}, \Cref{app:graph_4x4}, and \Cref{app:graph_5x5}.
+
+These graphs only reinforce my conclusions in the previous section.
+
+With DFS, the conclusions of randomness and being erratic are shown conclusively.
+For example, a problem with difficulty of 1 (1 move to solve the puzzle) took DFS 2,604,225 evaluations to find a solution -- the solution was 2,604,224 moves too long (compared to the optimal solution).
+But on the other hand, a problem that took 3.9 million evaluations using A* (as yet to be solved using DFS/IDS), solved by DFS by evaluating only 826,179 nodes.
+However, the major caveat being the solution from A* was 21 moves long, and the solution from DFS was 826,179 moves long.
+
+\subsubsection{Space Complexity vs Time Complexity}
+In this section, I decided to look at the trends between Time Complexity (number of nodes evaluated) and Space Complexity (indicated by RAM usage).
+The graphs are included in the Appendix.
+Where a trendline has been plotted, it should in theory have a y-intercept of 0, however, due to the overhead of loaded classes and the JVM, this base usage is in fact approximately 30MB.
+
+\paragraph{BFS Complexity}
+The graph in \Cref{app:graph_bfs} shows a fairly linear trend.
+As the time complexity increases, the space complexity increases at the same rate.
+This is to be completely expected because a Breadth First Search does not allow for nodes to be removed from memory.
+
+\paragraph{DFS Complexity}
+The graph in \Cref{app:graph_dfs} shows a linear trend.
+As the time complexity increases, the space complexity increases at roughly the same rate.
+This graph is not as conclusive due to the massive steps every so often.
+However, I attribute this to garbage collection.
+
+To minimise interruptions and reduce CPU usage, garbage collection does not run all the time, but periodically.
+There are several measures that are watched and trigger garbage collection;
+  these include time intervals, heap size.
+In the case of this graph, I believe garbage collection was being trigger when the heap grew too big.
+Then garbage collection kicked in and removed a lot of junk (unused/orphaned objects) from the heap.
+
+It is obvious that my implementation of DFS is not optimal, otherwise this memory profile would be less obvious.
+Anyway, I believe that this graph shows that the time complexity and space complexity are linearly linked.
+
+\paragraph{IDS Complexity}
+The graph in \Cref{app:graph_ids} shows absolutely not trend whatsoever.
+Unlike the dodgy garbage collection in the DFS graph (\Cref{app:graph_dfs}) I think garbage collection has worked really well for IDS.
+
+It is noted that the maximum memory usage is 151MB.
+This was when IDS had evaluated just over 11 million nodes.
+IDS works by searching top to bottom until it reaches a limit, then left to right.
+If it does not find a solution, it increases its depth limit and tries again.
+Because of this, when IDS hits the limit on the left side of the tree, those nodes are removed from memory as it travels to the right hand side.
+This means that IDS has a very small space complexity footprint -- and this is reflected in my findings.
+
+\paragraph{A* Heuristic Complexity}
+The graph in \Cref{app:graph-a*} shows a linear trend.
+I attribute thickness of the ``line'' to be due to garbage collection -- yet again.
+
+A* works by expanding nodes, evaluating their ``goodness'' (also know as priority), and then expanding nodes from the ``good'' nodes.
+This strategy minimises the amount of nodes that are looked at, but means that almost all nodes end up being stored in a Priority Queue.
+Therefore, as the number of nodes expanded increases, then the space complexity footprint will also increase.
+I strongly believe that my graph shows this to be true.
+
+\subsection{Limitations}
+
+
 %%
 %% SECTION: References
 %%
-\section{References}
+%\section{References}
 
 %%
 %% APPENDICES
@@ -297,6 +407,15 @@ I created a format for specifying start/exit states.
   \label{app:code-Search}
   \lstinputlisting[style=default, language=java]{src/blocksworld/search/Search.java}
 
+  \newpage
+  \subsection{run.sh}
+  \label{app:code-run}
+  \lstinputlisting[style=default, language=bash]{run.sh}
+
+  \subsection{test.sh}
+  \label{app:code-test}
+  \lstinputlisting[style=default, language=bash]{test.sh}
+
   %%
   %% SECTION: Output Evidence
   %%
@@ -344,5 +463,18 @@ I created a format for specifying start/exit states.
   \subsection{A* Heuristic Search}
   \label{app:example-a*}
   \lstinputlisting[style=none]{snippets/example-A*.txt}
+
+  %%
+  %% SECTION: Graphs
+  %%
+  \newpage
+  \includepdf[landscape=false,scale=0.9,angle=90,pagecommand={\section{Graphs}\subsection{2x2 Grid, Complexity vs Nodes Evaluated}\label{app:graph_2x2}}]{charts/Complexity-2x2.pdf}
+  \includepdf[landscape=false,scale=0.9,angle=90,pagecommand={\subsection{3x3 Grid, Complexity vs Nodes Evaluated}\label{app:graph_3x3}}]{charts/Complexity-3x3.pdf}
+  \includepdf[landscape=false,scale=0.9,angle=90,pagecommand={\subsection{4x4 Grid, Complexity vs Nodes Evaluated}\label{app:graph_4x4}}]{charts/Complexity-4x4.pdf}
+  \includepdf[landscape=false,scale=0.9,angle=90,pagecommand={\subsection{5x5 Grid, Complexity vs Nodes Evaluated}\label{app:graph_5x5}}]{charts/Complexity-5x5.pdf}
+  \includepdf[landscape=false,scale=0.9,angle=90,pagecommand={\subsection{BFS Complexity (Time vs Space)}\label{app:graph_bfs}}]{charts/SpaceTime-BFS.pdf}
+  \includepdf[landscape=false,scale=0.9,angle=90,pagecommand={\subsection{DFS Complexity (Time vs Space)}\label{app:graph_dfs}}]{charts/SpaceTime-DFS.pdf}
+  \includepdf[landscape=false,scale=0.9,angle=90,pagecommand={\subsection{IDS Complexity (Time vs Space)}\label{app:graph_ids}}]{charts/SpaceTime-IDS.pdf}
+  \includepdf[landscape=false,scale=0.9,angle=90,pagecommand={\subsection{A* Complexity (Time vs Space)}\label{app:graph_a*}}]{charts/SpaceTime-AStar.pdf}
 \end{appendices}
 \end{document}

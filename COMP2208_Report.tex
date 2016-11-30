@@ -309,7 +309,7 @@ Because of this, when IDS hits the limit on the left side of the tree, those nod
 This means that IDS has a very small space complexity footprint -- and this is reflected in my findings.
 
 \paragraph{A* Heuristic Complexity}
-The graph in \Cref{app:graph-a*} shows a linear trend.
+The graph in \Cref{app:graph_a*} shows a linear trend.
 I attribute thickness of the ``line'' to be due to garbage collection -- yet again.
 
 A* works by expanding nodes, evaluating their ``goodness'' (also know as priority), and then expanding nodes from the ``good'' nodes.
@@ -318,6 +318,26 @@ Therefore, as the number of nodes expanded increases, then the space complexity 
 I strongly believe that my graph shows this to be true.
 
 \subsection{Limitations}
+To produce my data for scalability, I only tested 1 grid for each problem difficulty.
+If I had more forethought and time, I would've tested the searches against a number of different permutations for each problem difficulty.
+This would exclude rotated and reflected puzzles, but would include unique different puzzles.
+For example, I only tested the searches against the puzzle labelled A, I would have liked to test against other puzzles with a difficulty of 2 as well -- some examples are shown below.
+\begin{verbatim}
+A:      B:      C:
+----    --*-    ----
+-*--    --a-    a---
+ba--    -b--    *b--
+-c--    -c--    -c--
+\end{verbatim}
+
+Although I do not think that testing against different states with the same difficulty would have affected my conclusions, I would still have preferred to use more data.
+
+\paragraph{This report only looked at square grids.}
+However, my code did not actually limit the input to have to be square in proportion.
+I definitely could have investigated the effect that different sized grids had on the effectiveness of the searches,
+  but considering this report's purpose was to compare and contrast the effectiveness of different tree search algorithms, I figured this would have been a little too far out of the scope of the report.
+In addition, I don't think that non-square grids would have had any affect on my outcomes -- but that is a claim to be investigated more thoroughly in the future.
+
 
 
 %%
